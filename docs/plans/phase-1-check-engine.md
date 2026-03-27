@@ -36,11 +36,11 @@
 - [x] Write tests: BrandRuleset loads from JSON, validates constraints, exports back to JSON
 
 ### Task 4: Rule engine skeleton and Issue model
-- [ ] Create `services/rules/__init__.py` and `services/rules/models.py` with `Issue` (id, slide_index, element_id, evaluator, severity, message, details, bbox), `Severity` enum (error, warning, info), `SlideIssueSet`
-- [ ] Create `services/rules/engine.py` with `RuleEngine` class that: accepts a list of evaluator functions, runs each against (CSM, BrandRuleset), collects and deduplicates issues, returns `List[SlideIssueSet]`
-- [ ] Each evaluator has signature: `(slide: Slide, brand: BrandRuleset) -> List[Issue]`
-- [ ] Engine runs evaluators per-slide, in parallel where possible
-- [ ] Write test: engine with a dummy evaluator that always returns one issue → verify output structure
+- [x] Create `services/rules/__init__.py` and `services/rules/models.py` with `Issue` (id, slide_index, element_id, evaluator, severity, message, details, bbox), `Severity` enum (error, warning, info), `SlideIssueSet`
+- [x] Create `services/rules/engine.py` with `RuleEngine` class that: accepts a list of evaluator functions, runs each against (CSM, BrandRuleset), collects and deduplicates issues, returns `List[SlideIssueSet]`
+- [x] Each evaluator has signature: `(slide: Slide, brand: BrandRuleset) -> List[Issue]`
+- [x] Engine runs evaluators per-slide, in parallel where possible
+- [x] Write test: engine with a dummy evaluator that always returns one issue → verify output structure
 
 ### Task 5: Color compliance evaluator
 - [ ] Create `services/rules/evaluators/__init__.py` and `services/rules/evaluators/color.py`
