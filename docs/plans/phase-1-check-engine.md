@@ -50,12 +50,12 @@
 - [x] Write tests: on-brand color passes, off-brand color emits issue with correct nearest match and Delta-E value
 
 ### Task 6: Typography evaluator
-- [ ] Create `services/rules/evaluators/typography.py`
-- [ ] Check font family: if not in brand's allowed font list → issue (severity=error)
-- [ ] Check font size: if below minimum for element role (title/body/caption) → issue (severity=warning)
-- [ ] Check font weight: if not in brand's allowed weight range for the font → issue (severity=info)
-- [ ] Message format: "Font 'Comic Sans' is not approved. Use 'Inter' or 'Roboto' instead."
-- [ ] Write tests: approved font passes, wrong font/size/weight each emit correct issue
+- [x] Create `services/rules/evaluators/typography.py`
+- [x] Check font family: if not in brand's allowed font list → issue (severity=error)
+- [x] Check font size: if below minimum for element role (title/body/caption) → issue (severity=warning)
+- [x] Check font weight: if not in brand's allowed weight range for the font → issue (severity=info)
+- [x] Message format: "Font 'Comic Sans' is not approved. Use 'Inter' or 'Roboto' instead."
+- [x] Write tests: approved font passes, wrong font/size/weight each emit correct issue
 
 ### Task 7: Accessibility evaluator (WCAG AA contrast)
 - [ ] Create `services/rules/evaluators/accessibility.py`
