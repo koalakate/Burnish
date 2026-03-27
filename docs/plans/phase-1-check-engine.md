@@ -21,14 +21,14 @@
 - [x] Write tests: Color construction, TextElement round-trip, CSM serialization, element type discriminator
 
 ### Task 2: PPTX parser (python-pptx → CSM)
-- [ ] Create `services/ingestion/__init__.py` and `services/ingestion/pptx_parser.py`
-- [ ] Implement `parse_pptx(file_path: Path) -> CSM` that reads a .pptx file and converts to CSM
-- [ ] Handle all shape types: text boxes, images, auto-shapes, tables, grouped shapes
-- [ ] Extract per-run font properties (family, size, weight, color) — fall back to slide master defaults when run-level properties are not set
-- [ ] Extract slide backgrounds (solid color, gradient, image)
-- [ ] Extract slide dimensions from presentation-level properties
-- [ ] Create `services/ingestion/thumbnail.py` — generate PNG thumbnails from CSM slides using Pillow (render shapes as colored rectangles with text, for preview purposes)
-- [ ] Write tests with a minimal hand-crafted PPTX fixture: parse → verify CSM has correct slide count, element types, font properties, colors
+- [x] Create `services/ingestion/__init__.py` and `services/ingestion/pptx_parser.py`
+- [x] Implement `parse_pptx(file_path: Path) -> CSM` that reads a .pptx file and converts to CSM
+- [x] Handle all shape types: text boxes, images, auto-shapes, tables, grouped shapes
+- [x] Extract per-run font properties (family, size, weight, color) — fall back to slide master defaults when run-level properties are not set
+- [x] Extract slide backgrounds (solid color, gradient, image)
+- [x] Extract slide dimensions from presentation-level properties
+- [x] Create `services/ingestion/thumbnail.py` — generate PNG thumbnails from CSM slides using Pillow (render shapes as colored rectangles with text, for preview purposes)
+- [x] Write tests with a minimal hand-crafted PPTX fixture: parse → verify CSM has correct slide count, element types, font properties, colors
 
 ### Task 3: Brand ruleset model
 - [ ] Define `BrandRuleset` Pydantic model in `packages/csm/brand.py`: `colors` (list of allowed Color with tolerance_delta_e), `fonts` (list of allowed Font families with weight ranges), `size_rules` (min/max by element role: title, body, caption), `layout_rules` (margins, max_elements_per_slide, alignment grid), `custom_tolerances` (per-evaluator overrides)
