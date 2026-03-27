@@ -43,11 +43,11 @@
 - [x] Write test: engine with a dummy evaluator that always returns one issue → verify output structure
 
 ### Task 5: Color compliance evaluator
-- [ ] Create `services/rules/evaluators/__init__.py` and `services/rules/evaluators/color.py`
-- [ ] For each text run and shape fill color in the slide, compute Delta-E (CIELAB) distance to the nearest brand palette color using colormath
-- [ ] If Delta-E > brand tolerance (default 10.0), emit an Issue with severity=error, message in plain English: "This blue (#1A2B4C) is off-brand. Closest match: Brand Blue (#1B3A6B)"
-- [ ] Include the nearest brand color in issue details for the correction engine
-- [ ] Write tests: on-brand color passes, off-brand color emits issue with correct nearest match and Delta-E value
+- [x] Create `services/rules/evaluators/__init__.py` and `services/rules/evaluators/color.py`
+- [x] For each text run and shape fill color in the slide, compute Delta-E (CIELAB) distance to the nearest brand palette color using colormath
+- [x] If Delta-E > brand tolerance (default 10.0), emit an Issue with severity=error, message in plain English: "This blue (#1A2B4C) is off-brand. Closest match: Brand Blue (#1B3A6B)"
+- [x] Include the nearest brand color in issue details for the correction engine
+- [x] Write tests: on-brand color passes, off-brand color emits issue with correct nearest match and Delta-E value
 
 ### Task 6: Typography evaluator
 - [ ] Create `services/rules/evaluators/typography.py`
