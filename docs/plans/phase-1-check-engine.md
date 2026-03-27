@@ -14,11 +14,11 @@
 - `pytest packages/ services/ tests/ -x --tb=short`
 
 ### Task 1: Canonical Slide Model (CSM) types
-- [ ] Create `packages/csm/models.py` with Pydantic v2 models: `Color` (hex, r, g, b, a), `Font` (family, weight, size_pt, italic, underline), `BoundingBox` (x, y, width, height), `TextRun`, `Paragraph`, `TextElement`, `ImageElement`, `ShapeElement`, `TableElement`, `TableCell`, `Slide`, `SlideBackground`, `CSM`
-- [ ] Use discriminated union for element types via `type` literal field (text, image, shape, table)
-- [ ] All models must support JSON round-trip: `model_dump_json()` → `model_validate_json()`
-- [ ] Export all types from `packages/csm/__init__.py`
-- [ ] Write tests: Color construction, TextElement round-trip, CSM serialization, element type discriminator
+- [x] Create `packages/csm/models.py` with Pydantic v2 models: `Color` (hex, r, g, b, a), `Font` (family, weight, size_pt, italic, underline), `BoundingBox` (x, y, width, height), `TextRun`, `Paragraph`, `TextElement`, `ImageElement`, `ShapeElement`, `TableElement`, `TableCell`, `Slide`, `SlideBackground`, `CSM`
+- [x] Use discriminated union for element types via `type` literal field (text, image, shape, table)
+- [x] All models must support JSON round-trip: `model_dump_json()` → `model_validate_json()`
+- [x] Export all types from `packages/csm/__init__.py`
+- [x] Write tests: Color construction, TextElement round-trip, CSM serialization, element type discriminator
 
 ### Task 2: PPTX parser (python-pptx → CSM)
 - [ ] Create `services/ingestion/__init__.py` and `services/ingestion/pptx_parser.py`
