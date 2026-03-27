@@ -9,3 +9,9 @@ node_modules/
 .next/
 .turbo/
 .DS_Store
+
+# Generated golden deck PPTX fixtures (regenerate with generate_fixtures.py)
+tests/golden_decks/*.pptx
+
+# ralphex progress logs
+.ralphex/progress/

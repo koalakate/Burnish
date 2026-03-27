@@ -90,10 +90,10 @@
 - [x] Write tests: perfect deck → DQS 100, deck with known issues → expected score, all-failing deck → DQS 0 (clamped)
 
 ### Task 11: Golden deck test suite
-- [ ] Create `tests/golden_decks/generate_fixtures.py` script that generates PPTX fixtures programmatically using python-pptx
-- [ ] Generate `brand_violations.pptx`: slides with known off-brand colors, wrong fonts, undersized text
-- [ ] Generate `accessibility_fails.pptx`: slides with low-contrast text, missing alt text
-- [ ] Generate `layout_issues.pptx`: overcrowded slides, elements off-margin, excessive bullets
-- [ ] Generate `clean_deck.pptx`: a fully compliant deck that should pass all checks
-- [ ] Write integration test: parse each fixture → run full rule engine + DQS → assert expected issues are found and clean deck scores DQS ≥ 95
-- [ ] This test suite is the regression gate for all future changes to the check engine
+- [x] Create `tests/golden_decks/generate_fixtures.py` script that generates PPTX fixtures programmatically using python-pptx
+- [x] Generate `brand_violations.pptx`: slides with known off-brand colors, wrong fonts, undersized text
+- [x] Generate `accessibility_fails.pptx`: slides with low-contrast text, missing alt text
+- [x] Generate `layout_issues.pptx`: overcrowded slides, elements off-margin, excessive bullets
+- [x] Generate `clean_deck.pptx`: a fully compliant deck that should pass all checks
+- [x] Write integration test: parse each fixture → run full rule engine + DQS → assert expected issues are found and clean deck scores DQS ≥ 95
+- [x] This test suite is the regression gate for all future changes to the check engine
