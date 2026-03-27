@@ -58,12 +58,12 @@
 - [x] Write tests: approved font passes, wrong font/size/weight each emit correct issue
 
 ### Task 7: Accessibility evaluator (WCAG AA contrast)
-- [ ] Create `services/rules/evaluators/accessibility.py`
-- [ ] For each text element, compute contrast ratio between text color and background color (slide background or shape fill)
-- [ ] WCAG AA thresholds: 4.5:1 for normal text, 3:1 for large text (≥18pt or ≥14pt bold)
-- [ ] Emit issue with severity=error if below threshold, include current ratio and minimum needed
-- [ ] Message format: "Low contrast (2.1:1) — text on this background needs at least 4.5:1 for readability."
-- [ ] Write tests: high-contrast passes, low-contrast normal text fails, low-contrast large text uses relaxed threshold
+- [x] Create `services/rules/evaluators/accessibility.py`
+- [x] For each text element, compute contrast ratio between text color and background color (slide background or shape fill)
+- [x] WCAG AA thresholds: 4.5:1 for normal text, 3:1 for large text (≥18pt or ≥14pt bold)
+- [x] Emit issue with severity=error if below threshold, include current ratio and minimum needed
+- [x] Message format: "Low contrast (2.1:1) — text on this background needs at least 4.5:1 for readability."
+- [x] Write tests: high-contrast passes, low-contrast normal text fails, low-contrast large text uses relaxed threshold
 
 ### Task 8: Layout, Content, and Image evaluators
 - [ ] Create `services/rules/evaluators/layout.py` — check margins (elements too close to slide edge), element count per slide (too crowded), alignment consistency (elements off-grid)
