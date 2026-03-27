@@ -1,5 +1,13 @@
 """Canonical Slide Model (CSM) package."""
 
+from packages.csm.brand import (
+    BrandColor,
+    BrandFont,
+    BrandRuleset,
+    CustomTolerances,
+    LayoutRules,
+    SizeRule,
+)
 from packages.csm.models import (
     CSM,
     BoundingBox,
@@ -19,12 +27,18 @@ from packages.csm.models import (
 
 __all__ = [
     "BoundingBox",
+    "BrandColor",
+    "BrandFont",
+    "BrandRuleset",
     "Color",
     "CSM",
+    "CustomTolerances",
     "Font",
     "ImageElement",
+    "LayoutRules",
     "Paragraph",
     "ShapeElement",
+    "SizeRule",
     "Slide",
     "SlideBackground",
     "SlideElement",

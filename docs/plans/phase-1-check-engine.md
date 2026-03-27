@@ -31,9 +31,9 @@
 - [x] Write tests with a minimal hand-crafted PPTX fixture: parse → verify CSM has correct slide count, element types, font properties, colors
 
 ### Task 3: Brand ruleset model
-- [ ] Define `BrandRuleset` Pydantic model in `packages/csm/brand.py`: `colors` (list of allowed Color with tolerance_delta_e), `fonts` (list of allowed Font families with weight ranges), `size_rules` (min/max by element role: title, body, caption), `layout_rules` (margins, max_elements_per_slide, alignment grid), `custom_tolerances` (per-evaluator overrides)
-- [ ] Create a default/sample brand ruleset JSON fixture at `tests/golden_decks/sample_brand.json`
-- [ ] Write tests: BrandRuleset loads from JSON, validates constraints, exports back to JSON
+- [x] Define `BrandRuleset` Pydantic model in `packages/csm/brand.py`: `colors` (list of allowed Color with tolerance_delta_e), `fonts` (list of allowed Font families with weight ranges), `size_rules` (min/max by element role: title, body, caption), `layout_rules` (margins, max_elements_per_slide, alignment grid), `custom_tolerances` (per-evaluator overrides)
+- [x] Create a default/sample brand ruleset JSON fixture at `tests/golden_decks/sample_brand.json`
+- [x] Write tests: BrandRuleset loads from JSON, validates constraints, exports back to JSON
 
 ### Task 4: Rule engine skeleton and Issue model
 - [ ] Create `services/rules/__init__.py` and `services/rules/models.py` with `Issue` (id, slide_index, element_id, evaluator, severity, message, details, bbox), `Severity` enum (error, warning, info), `SlideIssueSet`

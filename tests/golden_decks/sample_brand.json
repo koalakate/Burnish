@@ -1,0 +1,85 @@
+{
+  "name": "Acme Corp",
+  "colors": [
+    {
+      "name": "Brand Blue",
+      "hex": "#1B3A6B",
+      "r": 27,
+      "g": 58,
+      "b": 107,
+      "tolerance_delta_e": 10.0
+    },
+    {
+      "name": "Brand White",
+      "hex": "#FFFFFF",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "tolerance_delta_e": 5.0
+    },
+    {
+      "name": "Accent Orange",
+      "hex": "#E87722",
+      "r": 232,
+      "g": 119,
+      "b": 34,
+      "tolerance_delta_e": 10.0
+    },
+    {
+      "name": "Dark Gray",
+      "hex": "#333333",
+      "r": 51,
+      "g": 51,
+      "b": 51,
+      "tolerance_delta_e": 8.0
+    }
+  ],
+  "fonts": [
+    {
+      "family": "Inter",
+      "weight_min": 300,
+      "weight_max": 700
+    },
+    {
+      "family": "Roboto",
+      "weight_min": 400,
+      "weight_max": 700
+    }
+  ],
+  "size_rules": [
+    {
+      "role": "title",
+      "min_pt": 24.0,
+      "max_pt": 44.0
+    },
+    {
+      "role": "subtitle",
+      "min_pt": 18.0,
+      "max_pt": 32.0
+    },
+    {
+      "role": "body",
+      "min_pt": 12.0,
+      "max_pt": 24.0
+    },
+    {
+      "role": "caption",
+      "min_pt": 8.0,
+      "max_pt": 14.0
+    }
+  ],
+  "layout_rules": {
+    "margin_left": 0.75,
+    "margin_right": 0.75,
+    "margin_top": 0.5,
+    "margin_bottom": 0.5,
+    "max_elements_per_slide": 10,
+    "alignment_grid_pt": 12.0
+  },
+  "custom_tolerances": {
+    "max_words_per_slide": 75,
+    "max_bullets_per_slide": 7,
+    "image_min_dpi": 150.0,
+    "aspect_ratio_tolerance": 0.05
+  }
+}
