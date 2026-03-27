@@ -81,13 +81,13 @@
 - [x] Write test with mocked OpenAI client: verify prompt construction, response parsing, caching behavior
 
 ### Task 10: DQS (Design Quality Score) calculation
-- [ ] Create `services/rules/dqs.py` with `calculate_dqs(rule_issues: List[SlideIssueSet], vision_scores: List[VisionScore], accessibility_issues: List[Issue]) -> DQSReport`
-- [ ] Formula: `DQS = 0.4 × rule_score + 0.3 × vision_score + 0.3 × accessibility_score` where each component is 0-100
-- [ ] `rule_score`: 100 minus weighted penalty per issue (error=-10, warning=-3, info=-1), clamped to 0
-- [ ] `vision_score`: average of GPT-4o scores normalized to 0-100
-- [ ] `accessibility_score`: 100 minus 15 per WCAG AA violation, clamped to 0
-- [ ] Return per-slide DQS and overall deck DQS
-- [ ] Write tests: perfect deck → DQS 100, deck with known issues → expected score, all-failing deck → DQS 0 (clamped)
+- [x] Create `services/rules/dqs.py` with `calculate_dqs(rule_issues: List[SlideIssueSet], vision_scores: List[VisionScore], accessibility_issues: List[Issue]) -> DQSReport`
+- [x] Formula: `DQS = 0.4 × rule_score + 0.3 × vision_score + 0.3 × accessibility_score` where each component is 0-100
+- [x] `rule_score`: 100 minus weighted penalty per issue (error=-10, warning=-3, info=-1), clamped to 0
+- [x] `vision_score`: average of GPT-4o scores normalized to 0-100
+- [x] `accessibility_score`: 100 minus 15 per WCAG AA violation, clamped to 0
+- [x] Return per-slide DQS and overall deck DQS
+- [x] Write tests: perfect deck → DQS 100, deck with known issues → expected score, all-failing deck → DQS 0 (clamped)
 
 ### Task 11: Golden deck test suite
 - [ ] Create `tests/golden_decks/generate_fixtures.py` script that generates PPTX fixtures programmatically using python-pptx
