@@ -73,12 +73,12 @@
 - [x] Write tests for each evaluator: passing and failing cases
 
 ### Task 9: GPT-4o vision scoring service
-- [ ] Create `services/vision/__init__.py`, `services/vision/scorer.py`, and `services/vision/rubric.py`
-- [ ] Define scoring rubric in `rubric.py`: prompt template that asks GPT-4o to rate a slide thumbnail on visual quality (1-10), layout balance (1-10), readability (1-10), overall impression (1-10)
-- [ ] Implement `score_slide(thumbnail_png: bytes, rubric: str) -> VisionScore` that sends thumbnail to GPT-4o vision API, parses structured JSON response
-- [ ] Implement `score_deck(thumbnails: List[bytes]) -> List[VisionScore]` that scores slides in parallel with rate limiting (max 5 concurrent)
-- [ ] Add caching: hash thumbnail bytes → cache VisionScore in Redis (TTL 24h) to avoid re-scoring unchanged slides
-- [ ] Write test with mocked OpenAI client: verify prompt construction, response parsing, caching behavior
+- [x] Create `services/vision/__init__.py`, `services/vision/scorer.py`, and `services/vision/rubric.py`
+- [x] Define scoring rubric in `rubric.py`: prompt template that asks GPT-4o to rate a slide thumbnail on visual quality (1-10), layout balance (1-10), readability (1-10), overall impression (1-10)
+- [x] Implement `score_slide(thumbnail_png: bytes, rubric: str) -> VisionScore` that sends thumbnail to GPT-4o vision API, parses structured JSON response
+- [x] Implement `score_deck(thumbnails: List[bytes]) -> List[VisionScore]` that scores slides in parallel with rate limiting (max 5 concurrent)
+- [x] Add caching: hash thumbnail bytes → cache VisionScore in Redis (TTL 24h) to avoid re-scoring unchanged slides
+- [x] Write test with mocked OpenAI client: verify prompt construction, response parsing, caching behavior
 
 ### Task 10: DQS (Design Quality Score) calculation
 - [ ] Create `services/rules/dqs.py` with `calculate_dqs(rule_issues: List[SlideIssueSet], vision_scores: List[VisionScore], accessibility_issues: List[Issue]) -> DQSReport`
