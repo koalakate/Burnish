@@ -66,11 +66,11 @@
 - [x] Write tests: high-contrast passes, low-contrast normal text fails, low-contrast large text uses relaxed threshold
 
 ### Task 8: Layout, Content, and Image evaluators
-- [ ] Create `services/rules/evaluators/layout.py` — check margins (elements too close to slide edge), element count per slide (too crowded), alignment consistency (elements off-grid)
-- [ ] Create `services/rules/evaluators/content.py` — check text density (too many words per slide), bullet count (more than 7 bullets), empty text placeholders
-- [ ] Create `services/rules/evaluators/image.py` — check image DPI (below 150 for print), aspect ratio distortion (stretched/squished beyond 5% tolerance), missing alt text
-- [ ] Each evaluator returns issues with plain-English messages
-- [ ] Write tests for each evaluator: passing and failing cases
+- [x] Create `services/rules/evaluators/layout.py` — check margins (elements too close to slide edge), element count per slide (too crowded), alignment consistency (elements off-grid)
+- [x] Create `services/rules/evaluators/content.py` — check text density (too many words per slide), bullet count (more than 7 bullets), empty text placeholders
+- [x] Create `services/rules/evaluators/image.py` — check image DPI (below 150 for print), aspect ratio distortion (stretched/squished beyond 5% tolerance), missing alt text
+- [x] Each evaluator returns issues with plain-English messages
+- [x] Write tests for each evaluator: passing and failing cases
 
 ### Task 9: GPT-4o vision scoring service
 - [ ] Create `services/vision/__init__.py`, `services/vision/scorer.py`, and `services/vision/rubric.py`
