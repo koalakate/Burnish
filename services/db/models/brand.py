@@ -1,4 +1,5 @@
 import uuid
+from typing import Any
 
 from sqlalchemy import Boolean, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -14,4 +15,4 @@ class BrandRuleset(Base, UUIDMixin, TimestampMixin):
     name: Mapped[str] = mapped_column(String(255))
     version: Mapped[int] = mapped_column(Integer, default=1)
     is_active: Mapped[bool] = mapped_column(Boolean, default=False)
-    rules: Mapped[dict] = mapped_column(JSONB, default=dict)
+    rules: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)

@@ -1,5 +1,6 @@
 import enum
 import uuid
+from typing import Any
 
 from sqlalchemy import Enum, ForeignKey, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -28,7 +29,7 @@ class Organization(Base, UUIDMixin, TimestampMixin):
     name: Mapped[str] = mapped_column(String(255))
     slug: Mapped[str] = mapped_column(String(100), unique=True)
     plan: Mapped[PlanType] = mapped_column(Enum(PlanType), default=PlanType.free)
-    settings: Mapped[dict] = mapped_column(JSONB, default=dict)
+    settings: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
 
     users: Mapped[list["User"]] = relationship(back_populates="organization")
 

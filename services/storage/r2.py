@@ -41,14 +41,16 @@ class R2Client:
 
     def download_file(self, key: str) -> bytes:
         response = self.s3.get_object(Bucket=self.bucket_name, Key=key)
-        return response["Body"].read()
+        result: bytes = response["Body"].read()
+        return result
 
     def get_signed_url(self, key: str, expires_in: int = 900) -> str:
-        return self.s3.generate_presigned_url(
+        url: str = self.s3.generate_presigned_url(
             "get_object",
             Params={"Bucket": self.bucket_name, "Key": key},
             ExpiresIn=expires_in,
         )
+        return url
 
     def delete_file(self, key: str) -> None:
         self.s3.delete_object(Bucket=self.bucket_name, Key=key)

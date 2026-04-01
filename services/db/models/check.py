@@ -1,6 +1,7 @@
 import enum
 import uuid
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import Boolean, DateTime, Enum, Float, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -65,7 +66,7 @@ class SlideCheckResult(Base, UUIDMixin):
     )
     slide_index: Mapped[int] = mapped_column(Integer)
     dqs_slide: Mapped[float] = mapped_column(Float, default=0.0)
-    vision_scores: Mapped[dict] = mapped_column(JSONB, default=dict)
+    vision_scores: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
     thumbnail_ref: Mapped[str] = mapped_column(String(1024), default="")
     corrected_thumbnail_ref: Mapped[str | None] = mapped_column(String(1024), nullable=True)
     corrected_csm_ref: Mapped[str | None] = mapped_column(String(1024), nullable=True)
@@ -84,7 +85,7 @@ class Issue(Base, UUIDMixin):
     severity: Mapped[Severity] = mapped_column(Enum(Severity))
     message: Mapped[str] = mapped_column(String(1024))
     element_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
-    element_bbox: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    element_bbox: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
     original_value: Mapped[str | None] = mapped_column(String(500), nullable=True)
     expected_value: Mapped[str | None] = mapped_column(String(500), nullable=True)
     correction_applied: Mapped[bool] = mapped_column(Boolean, default=False)

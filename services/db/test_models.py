@@ -12,7 +12,7 @@ from services.db.models.deck import SourceType
 from services.db.models.org import OrgRole, PlanType
 
 
-def test_all_models_registered_on_base():
+def test_all_models_registered_on_base() -> None:
     table_names = set(Base.metadata.tables.keys())
     expected = {
         "organizations",
@@ -26,7 +26,7 @@ def test_all_models_registered_on_base():
     assert expected.issubset(table_names), f"Missing tables: {expected - table_names}"
 
 
-def test_org_id_on_all_tenant_models():
+def test_org_id_on_all_tenant_models() -> None:
     """Every tenant-scoped model must have an org_id column for RLS."""
     tenant_models = [BrandRuleset, Deck, CheckRun]
     for model in tenant_models:
@@ -34,12 +34,12 @@ def test_org_id_on_all_tenant_models():
         assert "org_id" in columns, f"{model.__name__} missing org_id column"
 
 
-def test_user_has_org_id():
+def test_user_has_org_id() -> None:
     columns = {c.name for c in User.__table__.columns}
     assert "org_id" in columns
 
 
-def test_enums_defined():
+def test_enums_defined() -> None:
     assert PlanType.free.value == "free"
     assert OrgRole.admin.value == "admin"
     assert SourceType.pptx.value == "pptx"
@@ -49,16 +49,16 @@ def test_enums_defined():
     assert CorrectionStatus.pending.value == "pending"
 
 
-def test_check_run_relationships():
+def test_check_run_relationships() -> None:
     """CheckRun should have slide_results relationship."""
     assert hasattr(CheckRun, "slide_results")
 
 
-def test_issue_relationships():
+def test_issue_relationships() -> None:
     """Issue should have slide_result relationship."""
     assert hasattr(Issue, "slide_result")
 
 
-def test_slide_check_result_relationships():
+def test_slide_check_result_relationships() -> None:
     assert hasattr(SlideCheckResult, "check_run")
     assert hasattr(SlideCheckResult, "issues")

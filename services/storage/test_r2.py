@@ -1,10 +1,11 @@
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 from services.storage.r2 import R2Client
 
 
 @patch("services.storage.r2.boto3")
-def test_upload_file(mock_boto3):
+def test_upload_file(mock_boto3: Any) -> None:
     mock_s3 = MagicMock()
     mock_boto3.client.return_value = mock_s3
     client = R2Client(
@@ -25,7 +26,7 @@ def test_upload_file(mock_boto3):
 
 
 @patch("services.storage.r2.boto3")
-def test_download_file(mock_boto3):
+def test_download_file(mock_boto3: Any) -> None:
     mock_s3 = MagicMock()
     mock_boto3.client.return_value = mock_s3
     client = R2Client(
@@ -40,7 +41,7 @@ def test_download_file(mock_boto3):
 
 
 @patch("services.storage.r2.boto3")
-def test_generate_signed_url(mock_boto3):
+def test_generate_signed_url(mock_boto3: Any) -> None:
     mock_s3 = MagicMock()
     mock_boto3.client.return_value = mock_s3
     client = R2Client(
@@ -55,7 +56,7 @@ def test_generate_signed_url(mock_boto3):
 
 
 @patch("services.storage.r2.boto3")
-def test_delete_file(mock_boto3):
+def test_delete_file(mock_boto3: Any) -> None:
     mock_s3 = MagicMock()
     mock_boto3.client.return_value = mock_s3
     client = R2Client(
@@ -69,7 +70,7 @@ def test_delete_file(mock_boto3):
 
 
 @patch("services.storage.r2.boto3")
-def test_org_key_prefix(mock_boto3):
+def test_org_key_prefix(mock_boto3: Any) -> None:
     mock_s3 = MagicMock()
     mock_boto3.client.return_value = mock_s3
     client = R2Client(
