@@ -44,8 +44,14 @@ def evaluate_content(slide: Slide, brand: BrandRuleset) -> list[Issue]:
     - Empty text placeholders.
     """
     tolerances = brand.custom_tolerances
-    max_words = _DEFAULT_MAX_WORDS if tolerances.max_words_per_slide is None else tolerances.max_words_per_slide
-    max_bullets = _DEFAULT_MAX_BULLETS if tolerances.max_bullets_per_slide is None else tolerances.max_bullets_per_slide
+    max_words = (
+        _DEFAULT_MAX_WORDS if tolerances.max_words_per_slide is None
+        else tolerances.max_words_per_slide
+    )
+    max_bullets = (
+        _DEFAULT_MAX_BULLETS if tolerances.max_bullets_per_slide is None
+        else tolerances.max_bullets_per_slide
+    )
     issues: list[Issue] = []
 
     # --- Text density (slide-level word count) ---
