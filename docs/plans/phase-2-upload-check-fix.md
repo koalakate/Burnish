@@ -33,15 +33,15 @@
 - [x] Write tests: export a corrected CSM → re-parse the exported PPTX → verify corrections were applied and untouched elements are preserved
 
 ### Task 3: Deck upload + check trigger API routes
-- [ ] Implement `POST /api/decks/upload` in `services/api/routers/decks.py` — accept multipart PPTX upload, validate file type/size (max 50MB), store in R2 with org-prefixed key, create Deck DB record, return deck_id
-- [ ] Implement `GET /api/decks` — list decks for current org (paginated)
-- [ ] Implement `GET /api/decks/{deck_id}` — get deck details including status and thumbnail URLs
-- [ ] Implement `DELETE /api/decks/{deck_id}` — soft-delete deck and mark R2 files for cleanup
-- [ ] Implement `POST /api/decks/{deck_id}/check` in `services/api/routers/checks.py` — enqueue check job to BullMQ, return check_run_id
-- [ ] Implement `GET /api/checks/{check_run_id}` — get check status, overall DQS, per-slide summary
-- [ ] Implement `GET /api/checks/{check_run_id}/slides/{slide_index}` — get per-slide issues with bounding boxes
-- [ ] All routes enforce org-scoped RLS via middleware
-- [ ] Write API tests: upload flow, check trigger, results retrieval, 404 for wrong org
+- [x] Implement `POST /api/decks/upload` in `services/api/routers/decks.py` — accept multipart PPTX upload, validate file type/size (max 50MB), store in R2 with org-prefixed key, create Deck DB record, return deck_id
+- [x] Implement `GET /api/decks` — list decks for current org (paginated)
+- [x] Implement `GET /api/decks/{deck_id}` — get deck details including status and thumbnail URLs
+- [x] Implement `DELETE /api/decks/{deck_id}` — soft-delete deck and mark R2 files for cleanup
+- [x] Implement `POST /api/decks/{deck_id}/check` in `services/api/routers/checks.py` — enqueue check job to BullMQ, return check_run_id
+- [x] Implement `GET /api/checks/{check_run_id}` — get check status, overall DQS, per-slide summary
+- [x] Implement `GET /api/checks/{check_run_id}/slides/{slide_index}` — get per-slide issues with bounding boxes
+- [x] All routes enforce org-scoped RLS via middleware
+- [x] Write API tests: upload flow, check trigger, results retrieval, 404 for wrong org
 
 ### Task 4: Correction API routes
 - [ ] Implement `GET /api/checks/{check_run_id}/corrections` in `services/api/routers/corrections.py` — list all corrections grouped by slide
