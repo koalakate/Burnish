@@ -15,15 +15,15 @@
 - `cd apps/web && npm run lint && npm run build`
 
 ### Task 1: Correction engine — correctors
-- [ ] Create `services/correction/__init__.py` and `services/correction/engine.py` with `CorrectionEngine` class that takes a list of corrector functions and applies them to CSM
-- [ ] Create `services/correction/correctors/__init__.py`
-- [ ] Create `services/correction/correctors/color.py` — swap off-brand colors to the nearest brand palette color (using Delta-E result from the issue's details)
-- [ ] Create `services/correction/correctors/font.py` — substitute disallowed fonts with the first allowed brand font, preserving size and weight
-- [ ] Create `services/correction/correctors/contrast.py` — adjust text or background color to meet WCAG AA contrast ratio (lighten/darken the less prominent color)
-- [ ] Create `services/correction/correctors/font_size.py` — bump font sizes below the brand minimum to the minimum, scaling proportionally within a text box
-- [ ] Create `services/correction/correctors/alignment.py` — snap elements to the nearest grid line based on brand layout rules (margin, alignment grid)
-- [ ] Each corrector signature: `(csm: CSM, issues: List[Issue], brand: BrandRuleset) -> CSM` (returns modified copy, original untouched)
-- [ ] Write tests for each corrector: apply to a CSM with known issues → verify the issue is resolved in the corrected CSM
+- [x] Create `services/correction/__init__.py` and `services/correction/engine.py` with `CorrectionEngine` class that takes a list of corrector functions and applies them to CSM
+- [x] Create `services/correction/correctors/__init__.py`
+- [x] Create `services/correction/correctors/color.py` — swap off-brand colors to the nearest brand palette color (using Delta-E result from the issue's details)
+- [x] Create `services/correction/correctors/font.py` — substitute disallowed fonts with the first allowed brand font, preserving size and weight
+- [x] Create `services/correction/correctors/contrast.py` — adjust text or background color to meet WCAG AA contrast ratio (lighten/darken the less prominent color)
+- [x] Create `services/correction/correctors/font_size.py` — bump font sizes below the brand minimum to the minimum, scaling proportionally within a text box
+- [x] Create `services/correction/correctors/alignment.py` — snap elements to the nearest grid line based on brand layout rules (margin, alignment grid)
+- [x] Each corrector signature: `(csm: CSM, issues: List[Issue], brand: BrandRuleset) -> CSM` (returns modified copy, original untouched)
+- [x] Write tests for each corrector: apply to a CSM with known issues → verify the issue is resolved in the corrected CSM
 
 ### Task 2: PPTX exporter (corrected CSM → .pptx)
 - [ ] Create `services/correction/exporter.py` with `export_pptx(original_pptx_path: Path, corrected_csm: CSM) -> bytes`
