@@ -26,11 +26,11 @@
 - [x] Write tests for each corrector: apply to a CSM with known issues → verify the issue is resolved in the corrected CSM
 
 ### Task 2: PPTX exporter (corrected CSM → .pptx)
-- [ ] Create `services/correction/exporter.py` with `export_pptx(original_pptx_path: Path, corrected_csm: CSM) -> bytes`
-- [ ] Strategy: open the original PPTX with python-pptx, apply CSM corrections to matching shapes (by element ID), save as new .pptx
-- [ ] Handle: color changes (text run, shape fill), font substitution, font size changes, element repositioning
-- [ ] Preserve all original PPTX elements not touched by corrections (animations, transitions, notes, media)
-- [ ] Write tests: export a corrected CSM → re-parse the exported PPTX → verify corrections were applied and untouched elements are preserved
+- [x] Create `services/correction/exporter.py` with `export_pptx(original_pptx_path: Path, corrected_csm: CSM) -> bytes`
+- [x] Strategy: open the original PPTX with python-pptx, apply CSM corrections to matching shapes (by element ID), save as new .pptx
+- [x] Handle: color changes (text run, shape fill), font substitution, font size changes, element repositioning
+- [x] Preserve all original PPTX elements not touched by corrections (animations, transitions, notes, media)
+- [x] Write tests: export a corrected CSM → re-parse the exported PPTX → verify corrections were applied and untouched elements are preserved
 
 ### Task 3: Deck upload + check trigger API routes
 - [ ] Implement `POST /api/decks/upload` in `services/api/routers/decks.py` — accept multipart PPTX upload, validate file type/size (max 50MB), store in R2 with org-prefixed key, create Deck DB record, return deck_id
