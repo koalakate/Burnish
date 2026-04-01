@@ -21,8 +21,8 @@ def evaluate_images(slide: Slide, brand: BrandRuleset) -> list[Issue]:
     - Missing alt text (accessibility).
     """
     tolerances = brand.custom_tolerances
-    min_dpi = tolerances.image_min_dpi or _DEFAULT_MIN_DPI
-    ar_tolerance = tolerances.aspect_ratio_tolerance or _DEFAULT_ASPECT_RATIO_TOLERANCE
+    min_dpi = _DEFAULT_MIN_DPI if tolerances.image_min_dpi is None else tolerances.image_min_dpi
+    ar_tolerance = _DEFAULT_ASPECT_RATIO_TOLERANCE if tolerances.aspect_ratio_tolerance is None else tolerances.aspect_ratio_tolerance
     issues: list[Issue] = []
 
     for elem in slide.elements:
