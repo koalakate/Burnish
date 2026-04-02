@@ -75,3 +75,39 @@ export interface SlideDetail {
   thumbnail_url: string | null;
   issues: Issue[];
 }
+
+export interface Correction {
+  id: string;
+  issue_id: string;
+  rule_type: string;
+  severity: Severity;
+  message: string;
+  element_id: string | null;
+  element_bbox: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null;
+  original_value: string | null;
+  corrected_value: string | null;
+  status: CorrectionStatus;
+}
+
+export interface SlideCorrections {
+  slide_index: number;
+  thumbnail_url: string | null;
+  corrected_thumbnail_url: string | null;
+  corrections: Correction[];
+}
+
+export interface CorrectionsResponse {
+  check_run_id: string;
+  status: string;
+  slides: SlideCorrections[];
+}
+
+export interface ExportResponse {
+  download_url: string;
+  dqs_after: number;
+}

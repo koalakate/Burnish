@@ -86,14 +86,14 @@
 - [x] Live preview with hot-reload: CSM → Konva.js canvas updates in real-time as corrections are applied
 
 ### Task 9: Correction view UI (side-by-side)
-- [ ] Create `apps/web/src/components/correction-view.tsx` — side-by-side view with original slide (left) and corrected slide (right), both rendered via Konva.js
-- [ ] Highlight changed elements with a subtle glow/outline on the corrected side
-- [ ] Per-issue correction card: shows what changed ("Font changed: Comic Sans → Inter"), with Accept/Dismiss buttons
-- [ ] Priya's edit-in-place: clicking a correction opens an inline editor to tweak the AI's suggestion before accepting
-- [ ] "Fix All" button at the top — applies all corrections, shows progress, then offers download
-- [ ] Download button: fetches corrected PPTX from export API, triggers browser download
-- [ ] DQS badge on download confirmation (Priya screenshots this for clients)
-- [ ] Wire to API: corrections query, accept/dismiss mutations, fix-all mutation, export download
+- [x] Create `apps/web/src/components/correction-view.tsx` — side-by-side view with original slide (left) and corrected slide (right), both rendered via Konva.js
+- [x] Highlight changed elements with a subtle glow/outline on the corrected side
+- [x] Per-issue correction card: shows what changed ("Font changed: Comic Sans → Inter"), with Accept/Dismiss buttons
+- [x] Priya's edit-in-place: clicking a correction opens an inline editor to tweak the AI's suggestion before accepting
+- [x] "Fix All" button at the top — applies all corrections, shows progress, then offers download
+- [x] Download button: fetches corrected PPTX from export API, triggers browser download
+- [x] DQS badge on download confirmation (Priya screenshots this for clients)
+- [x] Wire to API: corrections query, accept/dismiss mutations, fix-all mutation, export download
 
 ### Task 10: End-to-end integration test
 - [ ] Write Playwright or Cypress E2E test at `tests/e2e/upload_check_correct.spec.ts`

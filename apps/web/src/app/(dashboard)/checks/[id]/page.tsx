@@ -118,6 +118,18 @@ export default function CheckResultsPage({
         </div>
       )}
 
+      {/* View corrections link */}
+      {checkRun.status === "complete" && (
+        <div>
+          <Link
+            href={`/checks/${id}/corrections`}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-400 hover:text-brand-400/80 transition-colors"
+          >
+            View corrections →
+          </Link>
+        </div>
+      )}
+
       {/* Slide strip — horizontal scrollable row of thumbnails */}
       {checkRun.slides && checkRun.slides.length > 0 && (
         <div>
