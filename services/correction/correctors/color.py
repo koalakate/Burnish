@@ -46,6 +46,8 @@ def correct_colors(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CSM:
         brand_rgb: Any = d.get("nearest_brand_rgb", [0, 0, 0])
         if actual_hex and brand_hex:
             rgb: list[int] = [int(v) for v in brand_rgb]
+            if len(rgb) < 3:
+                continue
             replacement = _make_color(brand_hex, rgb[0], rgb[1], rgb[2])
             replacements[(issue.slide_index, issue.element_id, actual_hex)] = replacement
 

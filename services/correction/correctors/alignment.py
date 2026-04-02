@@ -54,6 +54,14 @@ def correct_alignment(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CSM
         for elem in slide.elements:
             key = (slide.index, elem.id)
 
+            # Grid snap first, then margin correction (margins take precedence)
+            if key in grid_fixes and grid_emu > 0:
+                new_x = _snap_to_grid(elem.bbox.x, grid_emu)
+                new_y = _snap_to_grid(elem.bbox.y, grid_emu)
+                elem.bbox = elem.bbox.model_copy(
+                    update={"x": new_x, "y": new_y},
+                )
+
             # Margin correction: push element to meet minimum margin
             margins = margin_fixes.get(key)
             if margins:
@@ -65,13 +73,5 @@ def correct_alignment(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CSM
                     min_y = margins["top"] * _EMU_PER_INCH
                     if elem.bbox.y < min_y:
                         elem.bbox = elem.bbox.model_copy(update={"y": min_y})
-
-            # Grid snap correction
-            if key in grid_fixes and grid_emu > 0:
-                new_x = _snap_to_grid(elem.bbox.x, grid_emu)
-                new_y = _snap_to_grid(elem.bbox.y, grid_emu)
-                elem.bbox = elem.bbox.model_copy(
-                    update={"x": new_x, "y": new_y},
-                )
 
     return csm

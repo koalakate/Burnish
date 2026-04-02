@@ -15,6 +15,7 @@ from services.api.schemas.correction_schemas import (
     CorrectionActionResponse,
     CorrectionItem,
     CorrectionsListResponse,
+    EditCorrectionRequest,
     ExportResponse,
     FixAllResponse,
     SlideCorrectionGroup,
@@ -124,6 +125,33 @@ async def accept_correction(
                 return CorrectionActionResponse(
                     id=str(correction_id),
                     correction_status=CorrectionStatus.accepted.value,
+                )
+
+    raise HTTPException(status_code=404, detail="Correction not found")
+
+
+@router.post("/checks/{check_run_id}/corrections/{correction_id}/edit")
+async def edit_correction(
+    check_run_id: uuid.UUID,
+    correction_id: uuid.UUID,
+    body: EditCorrectionRequest,
+    db: AsyncSession = Depends(get_db),
+    user: dict[str, Any] = Depends(get_current_user),
+) -> CorrectionActionResponse:
+    org_id = user["org_id"]
+    await set_tenant_context(db, org_id)
+
+    check_run = await _get_check_run_for_org(check_run_id, org_id, db)
+
+    for sr in check_run.slide_results:
+        for issue in sr.issues:
+            if issue.id == correction_id:
+                issue.correction_status = CorrectionStatus.edited
+                issue.expected_value = body.value
+                await db.commit()
+                return CorrectionActionResponse(
+                    id=str(correction_id),
+                    correction_status=CorrectionStatus.edited.value,
                 )
 
     raise HTTPException(status_code=404, detail="Correction not found")

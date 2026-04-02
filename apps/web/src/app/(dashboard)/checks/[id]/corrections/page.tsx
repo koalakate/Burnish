@@ -6,6 +6,7 @@ import {
   useCorrections,
   useAcceptCorrection,
   useDismissCorrection,
+  useEditCorrection,
   useFixAll,
   useExport,
 } from "@/lib/queries";
@@ -25,6 +26,7 @@ export default function CorrectionsPage({
   const { data: correctionsData, isLoading, error } = useCorrections(checkRunId);
   const acceptMutation = useAcceptCorrection(checkRunId);
   const dismissMutation = useDismissCorrection(checkRunId);
+  const editMutation = useEditCorrection(checkRunId);
   const fixAllMutation = useFixAll(checkRunId);
 
   const [selectedCorrectionId, setSelectedCorrectionId] = useState<string | null>(null);
@@ -44,11 +46,10 @@ export default function CorrectionsPage({
   );
 
   const handleEdit = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (correctionId: string, _value: string) => {
-      acceptMutation.mutate(correctionId);
+    (correctionId: string, value: string) => {
+      editMutation.mutate({ correctionId, value });
     },
-    [acceptMutation]
+    [editMutation]
   );
 
   const handleFixAll = useCallback(() => {

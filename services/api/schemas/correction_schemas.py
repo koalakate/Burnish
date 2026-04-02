@@ -28,6 +28,10 @@ class CorrectionsListResponse(BaseModel):
     total: int = 0
 
 
+class EditCorrectionRequest(BaseModel):
+    value: str
+
+
 class CorrectionActionResponse(BaseModel):
     id: str
     correction_status: str

@@ -20,6 +20,7 @@ from services.db.models.brand import BrandRuleset as BrandRulesetModel
 from services.db.models.check import (
     CheckRun,
     CheckStatus,
+    CorrectionStatus,
     SlideCheckResult,
 )
 from services.db.models.check import (
@@ -169,6 +170,11 @@ async def process_check_job(job: Any, _token: Any = None) -> dict[str, Any]:
                             str(v2) if (v2 := ri.details.get("expected_value")) else None
                         ),
                         correction_applied=bool(ri.details.get("expected_value")),
+                    correction_status=(
+                        CorrectionStatus.pending
+                        if ri.details.get("expected_value")
+                        else None
+                    ),
                     )
                     db.add(issue_model)
 

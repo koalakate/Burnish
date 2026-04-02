@@ -34,6 +34,11 @@ export function useDeck(id: string) {
     queryKey: deckKeys.detail(id),
     queryFn: () => apiFetch<Deck>(`/api/decks/${id}`),
     enabled: !!id,
+    refetchInterval: (query) => {
+      const status = query.state.data?.status;
+      if (status === "uploading" || status === "parsing") return 2000;
+      return false;
+    },
   });
 }
 
@@ -154,6 +159,23 @@ export function useDismissCorrection(checkRunId: string) {
       apiFetch<void>(
         `/api/checks/${checkRunId}/corrections/${correctionId}/dismiss`,
         { method: "POST" }
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: correctionKeys.all(checkRunId),
+      });
+    },
+  });
+}
+
+export function useEditCorrection(checkRunId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ correctionId, value }: { correctionId: string; value: string }) =>
+      apiFetch<void>(
+        `/api/checks/${checkRunId}/corrections/${correctionId}/edit`,
+        { method: "POST", body: { value } }
       ),
     onSuccess: () => {
       queryClient.invalidateQueries({
