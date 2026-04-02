@@ -204,6 +204,7 @@ async def fix_all(
             if issue.correction_status not in (
                 CorrectionStatus.rejected,
                 CorrectionStatus.edited,
+                CorrectionStatus.accepted,
             ):
                 if issue.correction_applied or issue.expected_value is not None:
                     issue.correction_status = CorrectionStatus.accepted

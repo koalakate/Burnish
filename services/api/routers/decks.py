@@ -76,7 +76,8 @@ async def upload_deck(
         raise HTTPException(status_code=400, detail="File is empty")
 
     deck_id = uuid.uuid4()
-    r2_key = r2.org_key(org_id, f"decks/{deck_id}/{file.filename}")
+    safe_name = (file.filename or "upload.pptx").rsplit("/", 1)[-1].rsplit("\\", 1)[-1]
+    r2_key = r2.org_key(org_id, f"decks/{deck_id}/{safe_name}")
     r2.upload_file(
         data,
         r2_key,

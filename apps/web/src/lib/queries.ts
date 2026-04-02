@@ -190,7 +190,7 @@ export function useFixAll(checkRunId: string) {
 
   return useMutation({
     mutationFn: () =>
-      apiFetch<void>(`/api/checks/${checkRunId}/fix-all`, {
+      apiFetch<{ check_run_id: string; accepted_count: number; status: string }>(`/api/checks/${checkRunId}/fix-all`, {
         method: "POST",
       }),
     onSuccess: () => {

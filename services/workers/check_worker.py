@@ -153,6 +153,16 @@ async def process_check_job(job: Any, _token: Any = None) -> dict[str, Any]:
                     else:
                         info_count += 1
 
+                    # Normalize bbox from EMU to pixel coordinates (960x540)
+                    normalized_bbox = None
+                    if ri.bbox and csm.width > 0 and csm.height > 0:
+                        normalized_bbox = {
+                            "x": ri.bbox.x / csm.width * 960,
+                            "y": ri.bbox.y / csm.height * 540,
+                            "width": ri.bbox.width / csm.width * 960,
+                            "height": ri.bbox.height / csm.height * 540,
+                        }
+
                     issue_model = IssueModel(
                         id=uuid.uuid4(),
                         slide_result_id=slide_result.id,
@@ -160,9 +170,7 @@ async def process_check_job(job: Any, _token: Any = None) -> dict[str, Any]:
                         severity=sev,
                         message=ri.message,
                         element_id=ri.element_id or None,
-                        element_bbox=(
-                            ri.bbox.model_dump() if ri.bbox else None
-                        ),
+                        element_bbox=normalized_bbox,
                         original_value=(
                             str(v) if (v := ri.details.get("original_value")) else None
                         ),

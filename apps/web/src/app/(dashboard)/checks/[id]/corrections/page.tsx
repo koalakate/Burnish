@@ -4,6 +4,7 @@ import { use, useState, useCallback } from "react";
 import Link from "next/link";
 import {
   useCorrections,
+  useCheckRun,
   useAcceptCorrection,
   useDismissCorrection,
   useEditCorrection,
@@ -24,6 +25,7 @@ export default function CorrectionsPage({
 }) {
   const { id: checkRunId } = use(params);
   const { data: correctionsData, isLoading, error } = useCorrections(checkRunId);
+  const { data: checkRunData } = useCheckRun(checkRunId);
   const acceptMutation = useAcceptCorrection(checkRunId);
   const dismissMutation = useDismissCorrection(checkRunId);
   const editMutation = useEditCorrection(checkRunId);
@@ -205,7 +207,11 @@ export default function CorrectionsPage({
           {/* Side-by-side slide preview */}
           <div className="flex-1 min-w-0">
             <CorrectionView
-              originalThumbnailUrl={null}
+              originalThumbnailUrl={
+                checkRunData?.slides?.find(
+                  (s) => s.slide_index === activeSlide.slide_index
+                )?.thumbnail_url ?? null
+              }
               correctedThumbnailUrl={null}
               corrections={activeSlide.corrections}
               selectedCorrectionId={selectedCorrectionId}

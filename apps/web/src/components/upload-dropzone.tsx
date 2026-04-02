@@ -95,7 +95,7 @@ export function UploadDropzone({
       <input
         ref={inputRef}
         type="file"
-        accept={ACCEPTED_TYPE}
+        accept={`.pptx,${ACCEPTED_TYPE}`}
         onChange={onChange}
         className="hidden"
       />
