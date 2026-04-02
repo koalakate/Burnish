@@ -68,12 +68,12 @@
 - [x] Document the design direction in `apps/web/DESIGN.md` for reference
 
 ### Task 7: Upload + Deck library UI
-- [ ] Create `apps/web/src/components/upload-dropzone.tsx` — drag-and-drop PPTX upload with progress bar, file type validation, size limit feedback. Zero forms (Jake's mandate)
-- [ ] Create `apps/web/src/components/deck-card.tsx` — deck thumbnail, name, date, DQS badge, status indicator (parsing/checking/ready)
-- [ ] Implement upload page at `(dashboard)/decks/upload/page.tsx` — full-screen dropzone that auto-navigates to check results after upload
-- [ ] Implement deck library page at `(dashboard)/decks/page.tsx` — grid of deck cards, sorted by recent, with upload CTA
-- [ ] Wire to API using TanStack Query: upload mutation, deck list query with polling for status updates
-- [ ] Create Zustand store at `src/lib/stores/deck-store.ts` for active deck state
+- [x] Create `apps/web/src/components/upload-dropzone.tsx` — drag-and-drop PPTX upload with progress bar, file type validation, size limit feedback. Zero forms (Jake's mandate)
+- [x] Create `apps/web/src/components/deck-card.tsx` — deck thumbnail, name, date, DQS badge, status indicator (parsing/checking/ready)
+- [x] Implement upload page at `(dashboard)/decks/upload/page.tsx` — full-screen dropzone that auto-navigates to check results after upload
+- [x] Implement deck library page at `(dashboard)/decks/page.tsx` — grid of deck cards, sorted by recent, with upload CTA
+- [x] Wire to API using TanStack Query: upload mutation, deck list query with polling for status updates
+- [x] Create Zustand store at `src/lib/stores/deck-store.ts` for active deck state
 
 ### Task 8: Check results page + slide preview
 - [ ] Create `apps/web/src/components/slide-preview.tsx` — Konva.js canvas that renders a slide thumbnail with optional issue overlay bounding boxes
