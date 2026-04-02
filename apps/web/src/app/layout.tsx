@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, DM_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Providers } from "@/components/providers";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -33,7 +34,7 @@ export default function RootLayout({
         className={`${dmSans.variable} ${dmMono.variable} h-full antialiased dark`}
       >
         <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
-          {children}
+          <Providers>{children}</Providers>
         </body>
       </html>
     </ClerkProvider>
