@@ -217,7 +217,7 @@ async def fix_all(
 
     await db.commit()
 
-    if actionable_count > 0:
+    if actionable_count > 0 and not check_run.exported_pptx_ref:
         await enqueue_job(
             "correction",
             {

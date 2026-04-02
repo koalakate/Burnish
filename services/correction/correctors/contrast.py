@@ -43,43 +43,45 @@ def _adjust_text_color(
 ) -> tuple[int, int, int]:
     """Darken or lighten the text color until the contrast ratio meets the threshold.
 
-    Strategy: determine whether text is lighter or darker than background,
-    then push it further in that direction.
+    Strategy: adjust lightness via proportional RGB scaling to preserve the
+    original hue and saturation as much as possible.  When darkening, scale
+    all channels toward 0 by a common factor; when lightening, scale toward
+    255.  Falls back to the opposite direction if the target cannot be
+    reached.
     """
+    if _contrast_ratio(text_rgb, bg_rgb) >= threshold:
+        return text_rgb
+
     text_lum = _relative_luminance(*text_rgb)
     bg_lum = _relative_luminance(*bg_rgb)
 
     # Decide direction: if text is darker than bg, make it darker; else lighter
     darken = text_lum <= bg_lum
 
-    r, g, b = text_rgb
-    for _ in range(256):
-        if _contrast_ratio((r, g, b), bg_rgb) >= threshold:
-            return r, g, b
-        if darken:
-            r = _clamp(r - 1)
-            g = _clamp(g - 1)
-            b = _clamp(b - 1)
-        else:
-            r = _clamp(r + 1)
-            g = _clamp(g + 1)
-            b = _clamp(b + 1)
+    def _scale(rgb: tuple[int, int, int], *, toward_black: bool) -> tuple[int, int, int]:
+        """Progressively scale rgb toward black (factor→0) or white (factor→1)."""
+        r, g, b = rgb
+        for step in range(1, 256):
+            t = step / 255.0
+            if toward_black:
+                nr = _clamp(round(r * (1 - t)))
+                ng = _clamp(round(g * (1 - t)))
+                nb = _clamp(round(b * (1 - t)))
+            else:
+                nr = _clamp(round(r + (255 - r) * t))
+                ng = _clamp(round(g + (255 - g) * t))
+                nb = _clamp(round(b + (255 - b) * t))
+            if _contrast_ratio((nr, ng, nb), bg_rgb) >= threshold:
+                return nr, ng, nb
+        return nr, ng, nb
 
-    # If we hit black/white without meeting threshold, try the opposite direction
-    r, g, b = text_rgb
-    for _ in range(256):
-        if _contrast_ratio((r, g, b), bg_rgb) >= threshold:
-            return r, g, b
-        if not darken:
-            r = _clamp(r - 1)
-            g = _clamp(g - 1)
-            b = _clamp(b - 1)
-        else:
-            r = _clamp(r + 1)
-            g = _clamp(g + 1)
-            b = _clamp(b + 1)
+    result = _scale(text_rgb, toward_black=darken)
+    if _contrast_ratio(result, bg_rgb) >= threshold:
+        return result
 
-    return r, g, b
+    # Opposite direction as fallback
+    result = _scale(text_rgb, toward_black=not darken)
+    return result
 
 
 def _rgb_to_hex(r: int, g: int, b: int) -> str:

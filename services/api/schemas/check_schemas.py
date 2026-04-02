@@ -28,6 +28,7 @@ class SlideResultSummary(BaseModel):
     slide_index: int
     dqs_slide: float
     thumbnail_url: str | None = None
+    corrected_thumbnail_url: str | None = None
 
 
 class CheckRunDetailResponse(CheckRunResponse):

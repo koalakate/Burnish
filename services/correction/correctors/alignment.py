@@ -50,6 +50,9 @@ def correct_alignment(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CSM
             required = float(raw_required)
             margin_fixes.setdefault(key, {})[side] = required
 
+    slide_width = csm.width
+    slide_height = csm.height
+
     for slide in csm.slides:
         for elem in slide.elements:
             key = (slide.index, elem.id)
@@ -73,5 +76,13 @@ def correct_alignment(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CSM
                     min_y = margins["top"] * _EMU_PER_INCH
                     if elem.bbox.y < min_y:
                         elem.bbox = elem.bbox.model_copy(update={"y": min_y})
+                if "right" in margins and slide_width > 0:
+                    max_x = slide_width - margins["right"] * _EMU_PER_INCH - elem.bbox.width
+                    if elem.bbox.x > max_x:
+                        elem.bbox = elem.bbox.model_copy(update={"x": max_x})
+                if "bottom" in margins and slide_height > 0:
+                    max_y = slide_height - margins["bottom"] * _EMU_PER_INCH - elem.bbox.height
+                    if elem.bbox.y > max_y:
+                        elem.bbox = elem.bbox.model_copy(update={"y": max_y})
 
     return csm

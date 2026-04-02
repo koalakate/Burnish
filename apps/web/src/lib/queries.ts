@@ -207,10 +207,11 @@ export function useExport(checkRunId: string, enabled: boolean) {
     queryFn: () =>
       apiFetch<ExportResponse>(`/api/checks/${checkRunId}/export`),
     enabled: !!checkRunId && enabled,
-    retry: true,
+    retry: 10,
+    retryDelay: 3000,
     refetchInterval: (query) => {
-      if (!query.state.data?.download_url) return 3000;
-      return false;
+      if (query.state.data?.download_url) return false;
+      return 3000;
     },
   });
 }

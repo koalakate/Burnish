@@ -25,7 +25,7 @@ from services.correction.engine import CorrectionEngine
 from services.correction.exporter import export_pptx
 from services.db.engine import async_session
 from services.db.models.brand import BrandRuleset as BrandRulesetModel
-from services.db.models.check import CheckRun, CheckStatus, CorrectionStatus, SlideCheckResult
+from services.db.models.check import CheckRun, CorrectionStatus, SlideCheckResult
 from services.db.models.deck import Deck
 from services.rules.models import Issue as RuleIssue
 from services.rules.models import Severity as RuleSeverity
@@ -178,6 +178,5 @@ async def process_correction_job(job: Any, _token: Any = None) -> dict[str, Any]
         except Exception:
             logger.exception("Correction failed for check_run_id=%s", check_run_id)
             check_run.exported_pptx_ref = None
-            check_run.status = CheckStatus.failed
             await db.commit()
             raise

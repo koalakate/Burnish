@@ -68,6 +68,7 @@ export interface SlideSummary {
   slide_index: number;
   dqs_slide: number;
   thumbnail_url: string | null;
+  corrected_thumbnail_url: string | null;
 }
 
 export interface SlideDetail {

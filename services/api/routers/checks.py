@@ -111,6 +111,11 @@ async def get_check_run(
             slide_index=sr.slide_index,
             dqs_slide=sr.dqs_slide,
             thumbnail_url=r2.get_signed_url(sr.thumbnail_ref) if sr.thumbnail_ref else None,
+            corrected_thumbnail_url=(
+                r2.get_signed_url(sr.corrected_thumbnail_ref)
+                if sr.corrected_thumbnail_ref
+                else None
+            ),
         )
         for sr in sorted(check_run.slide_results, key=lambda s: s.slide_index)
     ]
