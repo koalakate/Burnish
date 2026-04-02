@@ -16,7 +16,6 @@ class DeckResponse(BaseModel):
 
 
 class DeckDetailResponse(DeckResponse):
-    source_ref: str
     version_number: int
     thumbnail_urls: list[str] = []
 

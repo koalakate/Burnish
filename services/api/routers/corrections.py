@@ -121,6 +121,7 @@ async def accept_correction(
         for issue in sr.issues:
             if issue.id == correction_id:
                 issue.correction_status = CorrectionStatus.accepted
+                check_run.exported_pptx_ref = None
                 await db.commit()
                 return CorrectionActionResponse(
                     id=str(correction_id),
@@ -148,6 +149,7 @@ async def edit_correction(
             if issue.id == correction_id:
                 issue.correction_status = CorrectionStatus.edited
                 issue.expected_value = body.value
+                check_run.exported_pptx_ref = None
                 await db.commit()
                 return CorrectionActionResponse(
                     id=str(correction_id),
@@ -173,6 +175,7 @@ async def dismiss_correction(
         for issue in sr.issues:
             if issue.id == correction_id:
                 issue.correction_status = CorrectionStatus.rejected
+                check_run.exported_pptx_ref = None
                 await db.commit()
                 return CorrectionActionResponse(
                     id=str(correction_id),
@@ -217,7 +220,7 @@ async def fix_all(
 
     await db.commit()
 
-    if actionable_count > 0 and not check_run.exported_pptx_ref:
+    if actionable_count > 0:
         await enqueue_job(
             "correction",
             {

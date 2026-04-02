@@ -61,6 +61,79 @@ def _severity_to_db(severity_str: str) -> DBSeverity:
     return DBSeverity(severity_str)
 
 
+def _derive_expected_value(ri: RuleIssue) -> str | None:
+    """Derive the expected correction value from evaluator-specific details."""
+    d = ri.details
+    if not d:
+        return None
+
+    evaluator = ri.evaluator
+    check = d.get("check", "")
+
+    if evaluator == "color":
+        val = d.get("nearest_brand_hex")
+        return str(val) if val else None
+    if evaluator == "typography":
+        if check == "font_family":
+            families = d.get("allowed_families")
+            if isinstance(families, list) and families:
+                return str(families[0])
+        if check == "font_size":
+            min_pt = d.get("min_pt")
+            actual = d.get("actual_size_pt")
+            max_pt = d.get("max_pt")
+            if (
+                isinstance(actual, (int, float))
+                and isinstance(min_pt, (int, float))
+                and actual < min_pt
+            ):
+                return str(min_pt)
+            if (
+                isinstance(actual, (int, float))
+                and isinstance(max_pt, (int, float))
+                and actual > max_pt
+            ):
+                return str(max_pt)
+    if evaluator == "accessibility" and check == "wcag_aa_contrast":
+        return "auto"
+    if evaluator == "layout" and check == "margin":
+        val = d.get("required_inches")
+        return str(val) if val is not None else None
+
+    return None
+
+
+def _derive_original_value(ri: RuleIssue) -> str | None:
+    """Derive the original value from evaluator-specific details."""
+    d = ri.details
+    if not d:
+        return None
+
+    evaluator = ri.evaluator
+    check = d.get("check", "")
+
+    if evaluator == "color":
+        val = d.get("actual_hex")
+        return str(val) if val else None
+    if evaluator == "typography":
+        if check == "font_family":
+            val = d.get("actual_family")
+            return str(val) if val else None
+        if check == "font_size":
+            val = d.get("actual_size_pt")
+            return str(val) if val is not None else None
+    if evaluator == "accessibility" and check == "wcag_aa_contrast":
+        val = d.get("contrast_ratio")
+        return f"{val}:1" if val is not None else None
+    if evaluator == "layout" and check == "margin":
+        val = d.get("actual_inches")
+        if isinstance(val, (int, float)):
+            return str(round(val, 2))
+        return None
+
+    return None
+
+
 async def process_check_job(job: Any, _token: Any = None) -> dict[str, Any]:
     """Process a check job: load CSM, run evaluators, calculate DQS, store results."""
     data = job.data if hasattr(job, "data") else job
@@ -163,6 +236,9 @@ async def process_check_job(job: Any, _token: Any = None) -> dict[str, Any]:
                             "height": ri.bbox.height / csm.height * 540,
                         }
 
+                    expected_val = _derive_expected_value(ri)
+                    original_val = _derive_original_value(ri)
+
                     issue_model = IssueModel(
                         id=uuid.uuid4(),
                         slide_result_id=slide_result.id,
@@ -171,21 +247,17 @@ async def process_check_job(job: Any, _token: Any = None) -> dict[str, Any]:
                         message=ri.message,
                         element_id=ri.element_id or None,
                         element_bbox=normalized_bbox,
-                        original_value=(
-                            str(v) if (v := ri.details.get("original_value")) else None
-                        ),
-                        expected_value=(
-                            str(v2) if (v2 := ri.details.get("expected_value")) else None
-                        ),
+                        original_value=original_val,
+                        expected_value=expected_val,
                         rule_details={
                             k: v3
                             for k, v3 in ri.details.items()
                             if isinstance(v3, (str, int, float, bool, list, dict, type(None)))
                         } if ri.details else None,
-                        correction_applied=bool(ri.details.get("expected_value")),
+                        correction_applied=expected_val is not None,
                         correction_status=(
                             CorrectionStatus.pending
-                            if ri.details.get("expected_value")
+                            if expected_val is not None
                             else None
                         ),
                     )

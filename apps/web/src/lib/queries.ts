@@ -201,6 +201,8 @@ export function useFixAll(checkRunId: string) {
   });
 }
 
+const MAX_EXPORT_POLLS = 40; // ~2 minutes at 3s intervals
+
 export function useExport(checkRunId: string, enabled: boolean) {
   return useQuery({
     queryKey: correctionKeys.export(checkRunId),
@@ -211,6 +213,7 @@ export function useExport(checkRunId: string, enabled: boolean) {
     retryDelay: 3000,
     refetchInterval: (query) => {
       if (query.state.data?.download_url) return false;
+      if (query.state.dataUpdateCount > MAX_EXPORT_POLLS) return false;
       return 3000;
     },
   });
