@@ -92,7 +92,7 @@ async def process_correction_job(job: Any, _token: Any = None) -> dict[str, Any]
         from sqlalchemy import select
         from sqlalchemy.orm import selectinload
 
-        # Load check run with slide results and issues
+        # Load check run with slide results and issues (org-scoped)
         q = (
             select(CheckRun)
             .options(
@@ -100,7 +100,10 @@ async def process_correction_job(job: Any, _token: Any = None) -> dict[str, Any]
                     SlideCheckResult.issues
                 )
             )
-            .where(CheckRun.id == uuid.UUID(check_run_id))
+            .where(
+                CheckRun.id == uuid.UUID(check_run_id),
+                CheckRun.org_id == uuid.UUID(org_id),
+            )
         )
         check_run = (await db.execute(q)).scalar_one_or_none()
         if not check_run:
@@ -143,8 +146,10 @@ async def process_correction_job(job: Any, _token: Any = None) -> dict[str, Any]
                 tmp.write(pptx_bytes)
                 tmp_path = Path(tmp.name)
 
-            corrected_pptx_bytes = export_pptx(tmp_path, corrected_csm)
-            tmp_path.unlink(missing_ok=True)
+            try:
+                corrected_pptx_bytes = export_pptx(tmp_path, corrected_csm)
+            finally:
+                tmp_path.unlink(missing_ok=True)
 
             # Upload corrected PPTX to R2
             export_key = r2.org_key(

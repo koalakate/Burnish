@@ -23,8 +23,8 @@ def correct_font_sizes(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CS
     if not size_issues:
         return csm
 
-    # Group issues by (slide_index, element_id)
-    affected: dict[tuple[int, str], float] = {}
+    # Group issues by (slide_index, element_id) -> (factor, min_pt, max_pt)
+    affected: dict[tuple[int, str], tuple[float, float, float]] = {}
     for issue in size_issues:
         d = issue.details
         raw_actual: Any = d.get("actual_size_pt", 0)
@@ -38,7 +38,6 @@ def correct_font_sizes(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CS
             continue
 
         if actual < min_pt:
-            # Scale factor to bring the smallest size up to minimum
             factor = min_pt / actual
         elif actual > max_pt and max_pt > 0:
             factor = max_pt / actual
@@ -46,15 +45,15 @@ def correct_font_sizes(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CS
             continue
 
         key = (issue.slide_index, issue.element_id)
-        # Use the largest required scale factor for this element
-        if key not in affected or factor > affected[key]:
-            affected[key] = factor
+        if key not in affected or factor > affected[key][0]:
+            affected[key] = (factor, min_pt, max_pt)
 
     for slide in csm.slides:
         for elem in slide.elements:
-            elem_factor = affected.get((slide.index, elem.id))
-            if elem_factor is None:
+            entry = affected.get((slide.index, elem.id))
+            if entry is None:
                 continue
+            elem_factor, min_pt, max_pt = entry
 
             paragraphs_list: list[list[Paragraph]] = []
             if elem.type == "text":
@@ -69,6 +68,9 @@ def correct_font_sizes(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CS
                     for run in para.runs:
                         if run.font.size_pt is not None:
                             new_size = round(run.font.size_pt * elem_factor, 1)
+                            # Clamp to max to avoid overshooting
+                            if max_pt != float("inf"):
+                                new_size = min(new_size, max_pt)
                             run.font = run.font.model_copy(
                                 update={"size_pt": new_size},
                             )

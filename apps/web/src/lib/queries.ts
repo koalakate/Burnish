@@ -24,8 +24,8 @@ export const deckKeys = {
 export function useDecks() {
   return useQuery({
     queryKey: deckKeys.all,
-    queryFn: () => apiFetch<{ decks: Deck[] }>("/api/decks"),
-    select: (data) => data.decks,
+    queryFn: () => apiFetch<{ items: Deck[]; total: number }>("/api/decks"),
+    select: (data) => data.items,
   });
 }
 

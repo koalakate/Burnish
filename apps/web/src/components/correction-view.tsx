@@ -65,7 +65,7 @@ function SlideCanvas({
         )}
         {showGlow &&
           corrections
-            .filter((c) => c.element_bbox && c.status !== "rejected")
+            .filter((c) => c.element_bbox && c.correction_status !== "rejected")
             .map((correction) => {
               const bbox = correction.element_bbox!;
               const isSelected = correction.id === selectedCorrectionId;

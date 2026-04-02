@@ -10,45 +10,39 @@ const CHECK_RUN_ID = "chk-001";
 const CORRECTIONS = [
   {
     id: "cor-1",
-    issue_id: "iss-1",
     rule_type: "color",
     severity: "error" as const,
     message: "Off-brand fill color on title shape",
     element_id: "el-title",
-    element_bbox: { x: 0.05, y: 0.1, width: 0.9, height: 0.15 },
     original_value: "#FF0000",
-    corrected_value: "#1A73E8",
-    status: "pending" as const,
+    expected_value: "#1A73E8",
+    correction_status: "pending" as const,
   },
   {
     id: "cor-2",
-    issue_id: "iss-2",
     rule_type: "font",
     severity: "warning" as const,
     message: "Font changed: Comic Sans → Inter",
     element_id: "el-body",
-    element_bbox: { x: 0.05, y: 0.3, width: 0.9, height: 0.5 },
     original_value: "Comic Sans MS",
-    corrected_value: "Inter",
-    status: "pending" as const,
+    expected_value: "Inter",
+    correction_status: "pending" as const,
   },
   {
     id: "cor-3",
-    issue_id: "iss-3",
     rule_type: "contrast",
     severity: "warning" as const,
     message: "Low contrast on subtitle text",
     element_id: "el-sub",
-    element_bbox: { x: 0.1, y: 0.25, width: 0.8, height: 0.08 },
     original_value: "#CCCCCC",
-    corrected_value: "#333333",
-    status: "pending" as const,
+    expected_value: "#333333",
+    correction_status: "pending" as const,
   },
 ];
 
 // Keep mutable state so mutations can update it
 function freshCorrections() {
-  return CORRECTIONS.map((c) => ({ ...c, status: "pending" as const }));
+  return CORRECTIONS.map((c) => ({ ...c, correction_status: "pending" as const }));
 }
 
 // 1×1 transparent PNG as a data URI for thumbnail mocking
@@ -125,15 +119,13 @@ async function mockApiRoutes(page: Page) {
       contentType: "application/json",
       body: JSON.stringify({
         check_run_id: CHECK_RUN_ID,
-        status: "complete",
         slides: [
           {
             slide_index: 0,
-            thumbnail_url: TINY_PNG,
-            corrected_thumbnail_url: TINY_PNG,
             corrections: corrections.map((c) => ({ ...c })),
           },
         ],
+        total: corrections.length,
       }),
     });
   });
@@ -144,7 +136,7 @@ async function mockApiRoutes(page: Page) {
     const match = url.match(/corrections\/([^/]+)\/accept/);
     const id = match?.[1];
     const c = corrections.find((x) => x.id === id);
-    if (c) c.status = "accepted" as never;
+    if (c) c.correction_status = "accepted" as never;
     await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
   });
 
@@ -154,14 +146,14 @@ async function mockApiRoutes(page: Page) {
     const match = url.match(/corrections\/([^/]+)\/dismiss/);
     const id = match?.[1];
     const c = corrections.find((x) => x.id === id);
-    if (c) c.status = "rejected" as never;
+    if (c) c.correction_status = "rejected" as never;
     await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
   });
 
   // Fix all
   await page.route(`${API}/api/checks/${CHECK_RUN_ID}/fix-all`, async (route: Route) => {
     for (const c of corrections) {
-      if (c.status === "pending") c.status = "accepted" as never;
+      if (c.correction_status === "pending") c.correction_status = "accepted" as never;
     }
     fixAllApplied = true;
     await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
@@ -173,6 +165,7 @@ async function mockApiRoutes(page: Page) {
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
+        check_run_id: CHECK_RUN_ID,
         download_url: `${API}/files/corrected-deck.pptx`,
         dqs_after: 91,
       }),
@@ -258,24 +251,26 @@ test.describe("Upload-Check-Fix E2E", () => {
       buffer: Buffer.from("PK-test-pptx-content"),
     });
 
-    // 3. Should navigate to check results page
-    await page.waitForURL(/\/checks\//, { timeout: 15_000 });
+    // 3. Should navigate to deck detail page after upload
+    await page.waitForURL(/\/decks\//, { timeout: 15_000 });
+
+    // 4. Navigate to check results (simulating user triggering check after ingestion)
+    await page.goto(`/checks/${CHECK_RUN_ID}`);
     await expect(page.getByText("Check Results")).toBeVisible();
 
-    // 4. Check results page should show polling first, then complete
-    // The mock returns "running" on first poll, "complete" on second
+    // 5. Check results page should show polling first, then complete
     await expect(page.getByText("Check complete")).toBeVisible({
       timeout: 10_000,
     });
 
-    // 5. Verify issues are displayed
+    // 6. Verify issues are displayed
     await expect(page.getByText("1")).toBeVisible(); // error count
     await expect(page.getByText("error")).toBeVisible();
 
-    // 6. Verify DQS badge is shown
+    // 7. Verify DQS badge is shown
     await expect(page.getByText("62")).toBeVisible();
 
-    // 7. Click "View corrections" link
+    // 8. Click "View corrections" link
     await page.getByText("View corrections →").click();
     await page.waitForURL(/\/corrections/, { timeout: 10_000 });
 
@@ -402,7 +397,10 @@ test.describe("Upload-Check-Fix E2E", () => {
       buffer: Buffer.from("PK-timing-test"),
     });
 
-    await page.waitForURL(/\/checks\//, { timeout: 15_000 });
+    await page.waitForURL(/\/decks\//, { timeout: 15_000 });
+
+    // Navigate to check results (simulating check trigger after ingestion)
+    await page.goto(`/checks/${CHECK_RUN_ID}`);
     await expect(page.getByText("Check complete")).toBeVisible({
       timeout: 10_000,
     });

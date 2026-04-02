@@ -7,10 +7,11 @@ export type CorrectionStatus = "pending" | "accepted" | "rejected" | "edited";
 export interface Deck {
   id: string;
   name: string;
+  status: string;
   source_type: string;
   slide_count: number;
-  version_number: number;
   created_at: string;
+  updated_at: string;
 }
 
 export interface CheckRun {
@@ -78,7 +79,6 @@ export interface SlideDetail {
 
 export interface Correction {
   id: string;
-  issue_id: string;
   rule_type: string;
   severity: Severity;
   message: string;
@@ -90,24 +90,23 @@ export interface Correction {
     height: number;
   } | null;
   original_value: string | null;
-  corrected_value: string | null;
-  status: CorrectionStatus;
+  expected_value: string | null;
+  correction_status: CorrectionStatus | null;
 }
 
 export interface SlideCorrections {
   slide_index: number;
-  thumbnail_url: string | null;
-  corrected_thumbnail_url: string | null;
   corrections: Correction[];
 }
 
 export interface CorrectionsResponse {
   check_run_id: string;
-  status: string;
   slides: SlideCorrections[];
+  total: number;
 }
 
 export interface ExportResponse {
+  check_run_id: string;
   download_url: string;
-  dqs_after: number;
+  dqs_after: number | null;
 }

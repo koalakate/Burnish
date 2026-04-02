@@ -16,6 +16,7 @@ from services.api.schemas.deck_schemas import (
 )
 from services.db.models.deck import Deck, DeckStatus, SourceType
 from services.storage.r2 import R2Client
+from services.workers.queue import enqueue_job
 
 router = APIRouter(prefix="/api/decks", tags=["decks"])
 
@@ -92,6 +93,8 @@ async def upload_deck(
     )
     db.add(deck)
     await db.commit()
+
+    await enqueue_job("ingestion", {"deck_id": str(deck_id), "org_id": org_id})
 
     return {"deck_id": str(deck_id)}
 

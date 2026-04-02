@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from bullmq import Queue
 
-REDIS_URL = "redis://localhost:6379"
+REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379")
 
 
 async def enqueue_job(queue_name: str, data: dict[str, Any]) -> str:

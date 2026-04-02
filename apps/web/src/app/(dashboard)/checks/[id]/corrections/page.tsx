@@ -98,7 +98,7 @@ export default function CorrectionsPage({
   const slides = correctionsData.slides;
   const activeSlide = slides[activeSlideIndex];
   const allCorrections = slides.flatMap((s) => s.corrections);
-  const pendingCount = allCorrections.filter((c) => c.status === "pending").length;
+  const pendingCount = allCorrections.filter((c) => c.correction_status === "pending").length;
   const allResolved = pendingCount === 0;
 
   return (
@@ -150,7 +150,7 @@ export default function CorrectionsPage({
       {/* Download confirmation with DQS */}
       {showExport && exportData && (
         <div className="rounded-lg border border-dqs-good/30 bg-dqs-good/5 p-4 flex items-center gap-4">
-          <DqsBadge score={exportData.dqs_after} size="lg" />
+          {exportData.dqs_after != null && <DqsBadge score={exportData.dqs_after} size="lg" />}
           <div>
             <p className="text-sm font-medium">Corrections applied</p>
             <p className="text-xs text-muted-foreground mt-0.5">
@@ -174,7 +174,7 @@ export default function CorrectionsPage({
         <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1">
           {slides.map((slide, idx) => {
             const slidePending = slide.corrections.filter(
-              (c) => c.status === "pending"
+              (c) => c.correction_status === "pending"
             ).length;
             return (
               <button
@@ -204,8 +204,8 @@ export default function CorrectionsPage({
           {/* Side-by-side slide preview */}
           <div className="flex-1 min-w-0">
             <CorrectionView
-              originalThumbnailUrl={activeSlide.thumbnail_url}
-              correctedThumbnailUrl={activeSlide.corrected_thumbnail_url}
+              originalThumbnailUrl={null}
+              correctedThumbnailUrl={null}
               corrections={activeSlide.corrections}
               selectedCorrectionId={selectedCorrectionId}
               onCorrectionClick={handleCorrectionClick}

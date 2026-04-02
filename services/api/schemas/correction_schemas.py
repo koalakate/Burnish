@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from pydantic import BaseModel
 
 
@@ -9,6 +11,7 @@ class CorrectionItem(BaseModel):
     severity: str
     message: str
     element_id: str | None = None
+    element_bbox: dict[str, Any] | None = None
     original_value: str | None = None
     expected_value: str | None = None
     correction_status: str | None = None
@@ -39,3 +42,4 @@ class FixAllResponse(BaseModel):
 class ExportResponse(BaseModel):
     check_run_id: str
     download_url: str
+    dqs_after: float | None = None

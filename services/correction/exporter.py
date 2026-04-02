@@ -171,11 +171,13 @@ def _apply_paragraphs(
             if csm_run.font.weight is not None:
                 pptx_run.font.bold = csm_run.font.weight >= 700
 
-            # Italic
-            pptx_run.font.italic = csm_run.font.italic
+            # Italic — only set if explicitly specified to avoid overriding theme inheritance
+            if csm_run.font.italic is not None:
+                pptx_run.font.italic = csm_run.font.italic
 
-            # Underline
-            pptx_run.font.underline = csm_run.font.underline
+            # Underline — only set if explicitly specified
+            if csm_run.font.underline is not None:
+                pptx_run.font.underline = csm_run.font.underline
 
             # Text color
             if csm_run.color is not None:

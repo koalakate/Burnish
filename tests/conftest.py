@@ -17,5 +17,6 @@ def _mock_enqueue_job(monkeypatch: pytest.MonkeyPatch) -> None:
     """Prevent tests from connecting to a real Redis/BullMQ instance."""
     mock = AsyncMock(return_value="mock-job-id")
     monkeypatch.setattr("services.workers.queue.enqueue_job", mock)
+    monkeypatch.setattr("services.api.routers.decks.enqueue_job", mock)
     monkeypatch.setattr("services.api.routers.corrections.enqueue_job", mock)
     monkeypatch.setattr("services.api.routers.checks.enqueue_job", mock)

@@ -3,12 +3,11 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UploadDropzone } from "@/components/upload-dropzone";
-import { useUploadDeck, useTriggerCheck } from "@/lib/queries";
+import { useUploadDeck } from "@/lib/queries";
 
 export default function UploadPage() {
   const router = useRouter();
   const uploadMutation = useUploadDeck();
-  const checkMutation = useTriggerCheck();
   const [progress, setProgress] = useState(0);
 
   const handleFileAccepted = useCallback(
@@ -22,28 +21,21 @@ export default function UploadPage() {
 
       try {
         const { deck_id } = await uploadMutation.mutateAsync(file);
-        setProgress(90);
-
-        // Auto-trigger check
-        const { check_run_id } = await checkMutation.mutateAsync(deck_id);
         setProgress(100);
-
         clearInterval(interval);
 
-        // Navigate to check results
-        router.push(`/checks/${check_run_id}`);
+        // Navigate to deck detail — ingestion runs async, check can be
+        // triggered once the deck status is "parsed"
+        router.push(`/decks/${deck_id}`);
       } catch {
         clearInterval(interval);
         setProgress(0);
       }
     },
-    [uploadMutation, checkMutation, router]
+    [uploadMutation, router]
   );
 
-  const error =
-    uploadMutation.error?.message ||
-    checkMutation.error?.message ||
-    null;
+  const error = uploadMutation.error?.message || null;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-6rem)]">
@@ -57,7 +49,7 @@ export default function UploadPage() {
 
         <UploadDropzone
           onFileAccepted={handleFileAccepted}
-          isUploading={uploadMutation.isPending || checkMutation.isPending}
+          isUploading={uploadMutation.isPending}
           progress={progress}
           error={error}
         />

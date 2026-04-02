@@ -7,11 +7,18 @@ from packages.csm.models import CSM, Paragraph
 from services.rules.models import Issue
 
 
-def _replace_font_family_in_runs(paragraphs: list[Paragraph], replacement_family: str) -> None:
-    """Replace font family in all runs of the given paragraphs."""
+def _replace_font_family_in_runs(
+    paragraphs: list[Paragraph],
+    replacement_family: str,
+    allowed_families: set[str],
+) -> None:
+    """Replace disallowed font families in all runs of the given paragraphs."""
     for para in paragraphs:
         for run in para.runs:
-            if run.font.family is not None:
+            if (
+                run.font.family is not None
+                and run.font.family not in allowed_families
+            ):
                 run.font = run.font.model_copy(update={"family": replacement_family})
 
 
@@ -29,6 +36,7 @@ def correct_fonts(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CSM:
         return csm
 
     replacement_family = brand.fonts[0].family
+    allowed_families = {f.family for f in brand.fonts}
 
     # Build set of (slide_index, element_id) that need fixing
     affected: set[tuple[int, str]] = set()
@@ -41,11 +49,13 @@ def correct_fonts(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CSM:
                 continue
 
             if elem.type == "text":
-                _replace_font_family_in_runs(elem.paragraphs, replacement_family)
+                _replace_font_family_in_runs(elem.paragraphs, replacement_family, allowed_families)
             elif elem.type == "shape":
-                _replace_font_family_in_runs(elem.paragraphs, replacement_family)
+                _replace_font_family_in_runs(elem.paragraphs, replacement_family, allowed_families)
             elif elem.type == "table":
                 for cell in elem.cells:
-                    _replace_font_family_in_runs(cell.paragraphs, replacement_family)
+                    _replace_font_family_in_runs(
+                        cell.paragraphs, replacement_family, allowed_families,
+                    )
 
     return csm

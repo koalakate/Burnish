@@ -77,13 +77,14 @@ async def process_ingestion_job(job: Any, _token: Any = None) -> dict[str, Any]:
                 tmp.write(pptx_bytes)
                 tmp_path = Path(tmp.name)
 
-            csm = parse_pptx(tmp_path)
+            try:
+                csm = parse_pptx(tmp_path)
 
-            # Generate thumbnails
-            thumbnails = _generate_thumbnails(tmp_path, len(csm.slides))
-
-            # Clean up temp file
-            tmp_path.unlink(missing_ok=True)
+                # Generate thumbnails
+                thumbnails = _generate_thumbnails(tmp_path, len(csm.slides))
+            finally:
+                # Clean up temp file even on exception
+                tmp_path.unlink(missing_ok=True)
 
             # Store CSM as JSON in R2
             csm_key = r2.org_key(org_id, f"decks/{deck_id}/csm.json")

@@ -16,10 +16,9 @@ from bullmq import Worker
 from services.workers.check_worker import process_check_job
 from services.workers.correction_worker import process_correction_job
 from services.workers.ingestion_worker import process_ingestion_job
+from services.workers.queue import REDIS_URL
 
 logger = logging.getLogger(__name__)
-
-REDIS_URL = "redis://localhost:6379"
 
 QUEUE_CONFIG: list[dict[str, Any]] = [
     {"name": "ingestion", "processor": process_ingestion_job},

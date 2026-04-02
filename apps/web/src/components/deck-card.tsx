@@ -4,17 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Deck } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-type DeckStatus = "parsing" | "ready" | "checking" | "error";
+import { DqsBadge } from "@/components/dqs-badge";
 
 type DeckCardProps = {
   deck: Deck;
-  status?: DeckStatus;
   dqs?: number | null;
   thumbnailUrl?: string | null;
 };
 
-function StatusDot({ status }: { status: DeckStatus }) {
+function StatusDot({ status }: { status: string }) {
   return (
     <span
       className={cn(
@@ -28,27 +26,12 @@ function StatusDot({ status }: { status: DeckStatus }) {
   );
 }
 
-function DqsBadge({ score }: { score: number }) {
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums",
-        score >= 80 && "bg-dqs-good/15 text-dqs-good",
-        score >= 60 && score < 80 && "bg-dqs-moderate/15 text-dqs-moderate",
-        score < 60 && "bg-dqs-poor/15 text-dqs-poor"
-      )}
-    >
-      {score}
-    </span>
-  );
-}
-
 export function DeckCard({
   deck,
-  status = "ready",
   dqs = null,
   thumbnailUrl = null,
 }: DeckCardProps) {
+  const status = deck.status === "parsed" ? "ready" : deck.status;
   const formattedDate = new Date(deck.created_at).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -81,7 +64,7 @@ export function DeckCard({
           <h3 className="text-sm font-medium truncate group-hover:text-foreground text-foreground/90">
             {deck.name}
           </h3>
-          {dqs != null && <DqsBadge score={dqs} />}
+          {dqs != null && <DqsBadge score={dqs} size="sm" />}
         </div>
 
         <div className="flex items-center gap-2 text-xs text-muted-foreground">

@@ -64,6 +64,7 @@ def _issue_to_correction(issue: Issue) -> CorrectionItem:
         severity=issue.severity.value,
         message=issue.message,
         element_id=issue.element_id,
+        element_bbox=issue.element_bbox,
         original_value=issue.original_value,
         expected_value=issue.expected_value,
         correction_status=(
@@ -223,4 +224,5 @@ async def get_export(
     return ExportResponse(
         check_run_id=str(check_run_id),
         download_url=download_url,
+        dqs_after=check_run.dqs_overall,
     )
