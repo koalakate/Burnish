@@ -54,6 +54,7 @@ class CheckRun(Base, UUIDMixin, TimestampMixin):
     issue_count_info: Mapped[int] = mapped_column(Integer, default=0)
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    exported_pptx_ref: Mapped[str | None] = mapped_column(String(1024), nullable=True)
 
     slide_results: Mapped[list["SlideCheckResult"]] = relationship(back_populates="check_run")
 

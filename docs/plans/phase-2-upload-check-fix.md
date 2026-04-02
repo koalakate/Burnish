@@ -44,12 +44,12 @@
 - [x] Write API tests: upload flow, check trigger, results retrieval, 404 for wrong org
 
 ### Task 4: Correction API routes
-- [ ] Implement `GET /api/checks/{check_run_id}/corrections` in `services/api/routers/corrections.py` — list all corrections grouped by slide
-- [ ] Implement `POST /api/checks/{check_run_id}/corrections/{correction_id}/accept` — mark correction as accepted
-- [ ] Implement `POST /api/checks/{check_run_id}/corrections/{correction_id}/dismiss` — mark correction as dismissed
-- [ ] Implement `POST /api/checks/{check_run_id}/fix-all` — accept all corrections, trigger export worker
-- [ ] Implement `GET /api/checks/{check_run_id}/export` — download the corrected PPTX (returns signed R2 URL)
-- [ ] Write API tests: accept/dismiss flow, fix-all, export download
+- [x] Implement `GET /api/checks/{check_run_id}/corrections` in `services/api/routers/corrections.py` — list all corrections grouped by slide
+- [x] Implement `POST /api/checks/{check_run_id}/corrections/{correction_id}/accept` — mark correction as accepted
+- [x] Implement `POST /api/checks/{check_run_id}/corrections/{correction_id}/dismiss` — mark correction as dismissed
+- [x] Implement `POST /api/checks/{check_run_id}/fix-all` — accept all corrections, trigger export worker
+- [x] Implement `GET /api/checks/{check_run_id}/export` — download the corrected PPTX (returns signed R2 URL)
+- [x] Write API tests: accept/dismiss flow, fix-all, export download
 
 ### Task 5: BullMQ workers — ingestion, check, correction
 - [ ] Create `services/workers/__init__.py` and `services/workers/main.py` — BullMQ worker entry point that registers all job processors
