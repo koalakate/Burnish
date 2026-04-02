@@ -61,11 +61,11 @@
 - [x] Write integration test: upload PPTX → trigger check → poll until complete → verify issues exist → fix-all → download corrected PPTX
 
 ### Task 6: Frontend design direction
-- [ ] Define the visual design language for Burnish UI: color palette, typography scale, spacing system, component patterns
-- [ ] Design principles: speed-first for Jake (minimal chrome, immediate feedback), depth-available for Priya (expandable panels, detailed views)
-- [ ] Create a design tokens file at `apps/web/src/lib/design-tokens.ts` with colors, font sizes, spacing values
-- [ ] Configure Tailwind theme in `tailwind.config.ts` to use design tokens
-- [ ] Document the design direction in `apps/web/DESIGN.md` for reference
+- [x] Define the visual design language for Burnish UI: color palette, typography scale, spacing system, component patterns
+- [x] Design principles: speed-first for Jake (minimal chrome, immediate feedback), depth-available for Priya (expandable panels, detailed views)
+- [x] Create a design tokens file at `apps/web/src/lib/design-tokens.ts` with colors, font sizes, spacing values
+- [x] Configure Tailwind theme in `tailwind.config.ts` to use design tokens
+- [x] Document the design direction in `apps/web/DESIGN.md` for reference
 
 ### Task 7: Upload + Deck library UI
 - [ ] Create `apps/web/src/components/upload-dropzone.tsx` — drag-and-drop PPTX upload with progress bar, file type validation, size limit feedback. Zero forms (Jake's mandate)
