@@ -201,7 +201,10 @@ async def fix_all(
     accepted_count = 0
     for sr in check_run.slide_results:
         for issue in sr.issues:
-            if issue.correction_status != CorrectionStatus.rejected:
+            if issue.correction_status not in (
+                CorrectionStatus.rejected,
+                CorrectionStatus.edited,
+            ):
                 if issue.correction_applied or issue.expected_value is not None:
                     issue.correction_status = CorrectionStatus.accepted
                     accepted_count += 1

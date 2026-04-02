@@ -36,7 +36,7 @@ export function useDeck(id: string) {
     enabled: !!id,
     refetchInterval: (query) => {
       const status = query.state.data?.status;
-      if (status === "uploading" || status === "parsing") return 2000;
+      if (status === "uploaded" || status === "uploading" || status === "parsing") return 2000;
       return false;
     },
   });
@@ -207,5 +207,10 @@ export function useExport(checkRunId: string, enabled: boolean) {
     queryFn: () =>
       apiFetch<ExportResponse>(`/api/checks/${checkRunId}/export`),
     enabled: !!checkRunId && enabled,
+    retry: true,
+    refetchInterval: (query) => {
+      if (!query.state.data?.download_url) return 3000;
+      return false;
+    },
   });
 }

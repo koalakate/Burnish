@@ -89,6 +89,7 @@ class Issue(Base, UUIDMixin):
     element_bbox: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
     original_value: Mapped[str | None] = mapped_column(String(500), nullable=True)
     expected_value: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    rule_details: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
     correction_applied: Mapped[bool] = mapped_column(Boolean, default=False)
     correction_status: Mapped[CorrectionStatus | None] = mapped_column(
         Enum(CorrectionStatus), nullable=True

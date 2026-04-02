@@ -1,10 +1,9 @@
 "use client";
 
-import { use, useEffect } from "react";
+import { use, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useDeck, useTriggerCheck } from "@/lib/queries";
-import { DqsBadge } from "@/components/dqs-badge";
 import { Button } from "@/components/ui/button";
 import { Loader2, FileCheck } from "lucide-react";
 
@@ -19,8 +18,10 @@ export default function DeckDetailPage({
   const triggerCheck = useTriggerCheck();
 
   // Auto-trigger a check once the deck is parsed
+  const hasTriggeredCheck = useRef(false);
   useEffect(() => {
-    if (deck?.status === "parsed" && !triggerCheck.isPending && !triggerCheck.isSuccess) {
+    if (deck?.status === "parsed" && !hasTriggeredCheck.current) {
+      hasTriggeredCheck.current = true;
       triggerCheck.mutate(deckId, {
         onSuccess: (data) => {
           router.push(`/checks/${data.check_run_id}`);

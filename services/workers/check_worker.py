@@ -169,12 +169,17 @@ async def process_check_job(job: Any, _token: Any = None) -> dict[str, Any]:
                         expected_value=(
                             str(v2) if (v2 := ri.details.get("expected_value")) else None
                         ),
+                        rule_details={
+                            k: v3
+                            for k, v3 in ri.details.items()
+                            if isinstance(v3, (str, int, float, bool, list, dict, type(None)))
+                        } if ri.details else None,
                         correction_applied=bool(ri.details.get("expected_value")),
-                    correction_status=(
-                        CorrectionStatus.pending
-                        if ri.details.get("expected_value")
-                        else None
-                    ),
+                        correction_status=(
+                            CorrectionStatus.pending
+                            if ri.details.get("expected_value")
+                            else None
+                        ),
                     )
                     db.add(issue_model)
 

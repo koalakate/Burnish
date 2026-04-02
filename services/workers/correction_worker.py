@@ -25,7 +25,7 @@ from services.correction.engine import CorrectionEngine
 from services.correction.exporter import export_pptx
 from services.db.engine import async_session
 from services.db.models.brand import BrandRuleset as BrandRulesetModel
-from services.db.models.check import CheckRun, CorrectionStatus, SlideCheckResult
+from services.db.models.check import CheckRun, CheckStatus, CorrectionStatus, SlideCheckResult
 from services.db.models.deck import Deck
 from services.rules.models import Issue as RuleIssue
 from services.rules.models import Severity as RuleSeverity
@@ -54,6 +54,13 @@ def _db_issues_to_rule_issues(
         for issue in sr.issues:
             if issue.correction_status == CorrectionStatus.rejected:
                 continue
+            # Reconstruct full details from stored rule_details,
+            # falling back to original_value/expected_value
+            details: dict[str, object] = dict(issue.rule_details) if issue.rule_details else {}
+            if issue.original_value is not None:
+                details.setdefault("original_value", issue.original_value)
+            if issue.expected_value is not None:
+                details["expected_value"] = issue.expected_value
             rule_issues.append(
                 RuleIssue(
                     id=str(issue.id),
@@ -62,14 +69,7 @@ def _db_issues_to_rule_issues(
                     evaluator=issue.rule_type,
                     severity=RuleSeverity(issue.severity.value),
                     message=issue.message,
-                    details={
-                        k: v
-                        for k, v in {
-                            "original_value": issue.original_value,
-                            "expected_value": issue.expected_value,
-                        }.items()
-                        if v is not None
-                    },
+                    details=details,
                 )
             )
     return rule_issues
@@ -177,4 +177,7 @@ async def process_correction_job(job: Any, _token: Any = None) -> dict[str, Any]
 
         except Exception:
             logger.exception("Correction failed for check_run_id=%s", check_run_id)
+            check_run.exported_pptx_ref = None
+            check_run.status = CheckStatus.failed
+            await db.commit()
             raise

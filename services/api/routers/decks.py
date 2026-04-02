@@ -58,12 +58,11 @@ async def upload_deck(
     if not file.filename or not file.filename.lower().endswith(PPTX_EXTENSION):
         raise HTTPException(status_code=400, detail="Only .pptx files are accepted")
 
-    content_type = file.content_type or ""
+    content_type = file.content_type or "application/octet-stream"
     if content_type not in ALLOWED_CONTENT_TYPES:
-        if not file.filename.lower().endswith(PPTX_EXTENSION):
-            raise HTTPException(
-                status_code=400, detail="Only .pptx files are accepted"
-            )
+        raise HTTPException(
+            status_code=400, detail="Only .pptx files are accepted"
+        )
 
     data = await file.read()
     if len(data) > MAX_UPLOAD_SIZE:

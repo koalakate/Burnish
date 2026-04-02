@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import io
+import logging
 from pathlib import Path
 
 from pptx import Presentation
@@ -19,6 +20,8 @@ from packages.csm.models import (
     TableElement,
     TextElement,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def export_pptx(original_pptx_path: Path, corrected_csm: CSM) -> bytes:
@@ -190,7 +193,7 @@ def _apply_fill_color(shape: BaseShape, color: Color) -> None:
         shape.fill.solid()  # type: ignore[attr-defined]
         shape.fill.fore_color.rgb = _to_rgb(color)  # type: ignore[attr-defined]
     except (AttributeError, TypeError):
-        pass
+        logger.warning("Could not apply fill color to shape %s", shape.shape_id)
 
 
 def _apply_cell_fill(cell: object, color: Color) -> None:  # noqa: ANN001
@@ -212,7 +215,7 @@ def _apply_cell_fill(cell: object, color: Color) -> None:  # noqa: ANN001
         srgb = etree.SubElement(solid_fill, f"{{{ns}}}srgbClr")
         srgb.set("val", color.hex.lstrip("#"))
     except Exception:
-        pass
+        logger.warning("Could not apply cell fill color")
 
 
 def _to_rgb(color: Color) -> RGBColor:
