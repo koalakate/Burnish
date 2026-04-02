@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class CorrectionItem(BaseModel):
@@ -29,7 +29,7 @@ class CorrectionsListResponse(BaseModel):
 
 
 class EditCorrectionRequest(BaseModel):
-    value: str
+    value: str = Field(max_length=500)
 
 
 class CorrectionActionResponse(BaseModel):

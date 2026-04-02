@@ -13,18 +13,26 @@ class R2Settings(BaseSettings):
 class R2Client:
     def __init__(
         self,
-        account_id: str = "",
-        access_key_id: str = "",
-        secret_access_key: str = "",
-        bucket_name: str = "burnish-files",
+        account_id: str | None = None,
+        access_key_id: str | None = None,
+        secret_access_key: str | None = None,
+        bucket_name: str | None = None,
     ):
-        endpoint = f"https://{account_id}.r2.cloudflarestorage.com" if account_id else ""
+        settings = R2Settings()
+        account_id = account_id or settings.r2_account_id
+        access_key_id = access_key_id or settings.r2_access_key_id
+        secret_access_key = secret_access_key or settings.r2_secret_access_key
+        bucket_name = bucket_name or settings.r2_bucket_name
+        endpoint = (
+            settings.r2_endpoint_url
+            or (f"https://{account_id}.r2.cloudflarestorage.com" if account_id else "")
+        )
         self.bucket_name = bucket_name
         self.s3 = boto3.client(
             "s3",
             endpoint_url=endpoint or None,
-            aws_access_key_id=access_key_id,
-            aws_secret_access_key=secret_access_key,
+            aws_access_key_id=access_key_id or None,
+            aws_secret_access_key=secret_access_key or None,
             region_name="auto",
         )
 

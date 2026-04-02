@@ -64,9 +64,14 @@ async def upload_deck(
             status_code=400, detail="Only .pptx files are accepted"
         )
 
-    data = await file.read()
-    if len(data) > MAX_UPLOAD_SIZE:
-        raise HTTPException(status_code=400, detail="File exceeds 50MB limit")
+    chunks: list[bytes] = []
+    total = 0
+    while chunk := await file.read(1024 * 1024):
+        total += len(chunk)
+        if total > MAX_UPLOAD_SIZE:
+            raise HTTPException(status_code=400, detail="File exceeds 50MB limit")
+        chunks.append(chunk)
+    data = b"".join(chunks)
     if len(data) == 0:
         raise HTTPException(status_code=400, detail="File is empty")
 

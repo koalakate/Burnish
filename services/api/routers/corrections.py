@@ -211,19 +211,20 @@ async def fix_all(
 
     await db.commit()
 
-    await enqueue_job(
-        "correction",
-        {
-            "check_run_id": str(check_run_id),
-            "deck_id": str(check_run.deck_id),
-            "org_id": str(check_run.org_id),
-        },
-    )
+    if accepted_count > 0:
+        await enqueue_job(
+            "correction",
+            {
+                "check_run_id": str(check_run_id),
+                "deck_id": str(check_run.deck_id),
+                "org_id": str(check_run.org_id),
+            },
+        )
 
     return FixAllResponse(
         check_run_id=str(check_run_id),
         accepted_count=accepted_count,
-        status="accepted",
+        status="accepted" if accepted_count > 0 else "no_corrections",
     )
 
 

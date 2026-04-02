@@ -28,7 +28,7 @@ export default function DeckDetailPage({
         },
       });
     }
-  }, [deck?.status, deckId, triggerCheck, router]);
+  }, [deck?.status, deckId, router]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // If there's already a check running or complete, navigate there
   // (handled by the trigger response above)

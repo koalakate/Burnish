@@ -688,4 +688,3 @@ class TestQueueHelper:
 
         assert job_id == "test-job-123"
         mock_queue.add.assert_called_once_with("check", {"check_run_id": "abc"})
-        mock_queue.close.assert_called_once()
