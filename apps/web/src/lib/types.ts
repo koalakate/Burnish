@@ -56,3 +56,22 @@ export interface SlideCheckResult {
   thumbnail_ref: string;
   issues: Issue[];
 }
+
+export interface CheckRunDetail extends CheckRun {
+  started_at: string | null;
+  completed_at: string | null;
+  slides: SlideSummary[];
+}
+
+export interface SlideSummary {
+  slide_index: number;
+  dqs_slide: number;
+  thumbnail_url: string | null;
+}
+
+export interface SlideDetail {
+  slide_index: number;
+  dqs_slide: number;
+  thumbnail_url: string | null;
+  issues: Issue[];
+}

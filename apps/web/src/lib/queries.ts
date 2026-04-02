@@ -4,7 +4,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { apiFetch, apiUpload } from "./api";
-import type { Deck } from "./types";
+import type { Deck, CheckRunDetail, SlideDetail } from "./types";
 
 // ---- Keys ----
 
@@ -63,5 +63,40 @@ export function useTriggerCheck() {
       apiFetch<{ check_run_id: string }>(`/api/decks/${deckId}/check`, {
         method: "POST",
       }),
+  });
+}
+
+// ---- Check keys ----
+
+export const checkKeys = {
+  all: ["checks"] as const,
+  detail: (id: string) => ["checks", id] as const,
+  slide: (checkId: string, slideIndex: number) =>
+    ["checks", checkId, "slides", slideIndex] as const,
+};
+
+// ---- Check queries ----
+
+export function useCheckRun(checkRunId: string) {
+  return useQuery({
+    queryKey: checkKeys.detail(checkRunId),
+    queryFn: () => apiFetch<CheckRunDetail>(`/api/checks/${checkRunId}`),
+    enabled: !!checkRunId,
+    refetchInterval: (query) => {
+      const status = query.state.data?.status;
+      if (status === "queued" || status === "running") return 2000;
+      return false;
+    },
+  });
+}
+
+export function useSlideDetail(checkRunId: string, slideIndex: number) {
+  return useQuery({
+    queryKey: checkKeys.slide(checkRunId, slideIndex),
+    queryFn: () =>
+      apiFetch<SlideDetail>(
+        `/api/checks/${checkRunId}/slides/${slideIndex}`
+      ),
+    enabled: !!checkRunId && slideIndex >= 0,
   });
 }

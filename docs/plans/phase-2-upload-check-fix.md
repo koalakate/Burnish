@@ -76,14 +76,14 @@
 - [x] Create Zustand store at `src/lib/stores/deck-store.ts` for active deck state
 
 ### Task 8: Check results page + slide preview
-- [ ] Create `apps/web/src/components/slide-preview.tsx` — Konva.js canvas that renders a slide thumbnail with optional issue overlay bounding boxes
-- [ ] Create `apps/web/src/components/issue-overlay.tsx` — draw colored bounding boxes on slide canvas (red=error, yellow=warning, blue=info) with click-to-select
-- [ ] Create `apps/web/src/components/check-panel.tsx` — issue list with severity badges, plain-English descriptions, grouped by evaluator type
-- [ ] Create `apps/web/src/components/dqs-badge.tsx` — circular DQS score display (green ≥80, yellow 60-79, red <60)
-- [ ] Implement check results overview at `(dashboard)/checks/[id]/page.tsx` — slide strip (horizontal scrollable row of thumbnails with severity dots), overall DQS, issue count summary
-- [ ] Implement slide detail at `(dashboard)/checks/[id]/slides/[idx]/page.tsx` — large slide preview with overlays + issue panel on the right
-- [ ] Wire to API: check results query, slide issues query, auto-poll while status is "checking"
-- [ ] Live preview with hot-reload: CSM → Konva.js canvas updates in real-time as corrections are applied
+- [x] Create `apps/web/src/components/slide-preview.tsx` — Konva.js canvas that renders a slide thumbnail with optional issue overlay bounding boxes
+- [x] Create `apps/web/src/components/issue-overlay.tsx` — draw colored bounding boxes on slide canvas (red=error, yellow=warning, blue=info) with click-to-select
+- [x] Create `apps/web/src/components/check-panel.tsx` — issue list with severity badges, plain-English descriptions, grouped by evaluator type
+- [x] Create `apps/web/src/components/dqs-badge.tsx` — circular DQS score display (green ≥80, yellow 60-79, red <60)
+- [x] Implement check results overview at `(dashboard)/checks/[id]/page.tsx` — slide strip (horizontal scrollable row of thumbnails with severity dots), overall DQS, issue count summary
+- [x] Implement slide detail at `(dashboard)/checks/[id]/slides/[idx]/page.tsx` — large slide preview with overlays + issue panel on the right
+- [x] Wire to API: check results query, slide issues query, auto-poll while status is "checking"
+- [x] Live preview with hot-reload: CSM → Konva.js canvas updates in real-time as corrections are applied
 
 ### Task 9: Correction view UI (side-by-side)
 - [ ] Create `apps/web/src/components/correction-view.tsx` — side-by-side view with original slide (left) and corrected slide (right), both rendered via Konva.js
