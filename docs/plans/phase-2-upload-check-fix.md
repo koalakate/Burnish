@@ -52,13 +52,13 @@
 - [x] Write API tests: accept/dismiss flow, fix-all, export download
 
 ### Task 5: BullMQ workers — ingestion, check, correction
-- [ ] Create `services/workers/__init__.py` and `services/workers/main.py` — BullMQ worker entry point that registers all job processors
-- [ ] Create `services/workers/ingestion_worker.py` — on deck upload: download PPTX from R2, parse to CSM, generate slide thumbnails (PNG via Pillow), store CSM in DB (JSONB), upload thumbnails to R2, update deck status to "parsed"
-- [ ] Create `services/workers/check_worker.py` — on check trigger: load CSM from DB, load brand ruleset, run rule engine + vision scorer in parallel, calculate DQS, store results (issues, scores) in DB, update check_run status to "complete"
-- [ ] Create `services/workers/correction_worker.py` — after check complete: load CSM + issues, run correction engine, store corrected CSM and per-issue corrections in DB, pre-generate corrected PPTX and upload to R2
-- [ ] Wire workers to listen on BullMQ queues: "ingestion", "check", "correction"
-- [ ] Add worker to `docker-compose.yml` as a separate service
-- [ ] Write integration test: upload PPTX → trigger check → poll until complete → verify issues exist → fix-all → download corrected PPTX
+- [x] Create `services/workers/__init__.py` and `services/workers/main.py` — BullMQ worker entry point that registers all job processors
+- [x] Create `services/workers/ingestion_worker.py` — on deck upload: download PPTX from R2, parse to CSM, generate slide thumbnails (PNG via Pillow), store CSM in DB (JSONB), upload thumbnails to R2, update deck status to "parsed"
+- [x] Create `services/workers/check_worker.py` — on check trigger: load CSM from DB, load brand ruleset, run rule engine + vision scorer in parallel, calculate DQS, store results (issues, scores) in DB, update check_run status to "complete"
+- [x] Create `services/workers/correction_worker.py` — after check complete: load CSM + issues, run correction engine, store corrected CSM and per-issue corrections in DB, pre-generate corrected PPTX and upload to R2
+- [x] Wire workers to listen on BullMQ queues: "ingestion", "check", "correction"
+- [x] Add worker to `docker-compose.yml` as a separate service
+- [x] Write integration test: upload PPTX → trigger check → poll until complete → verify issues exist → fix-all → download corrected PPTX
 
 ### Task 6: Frontend design direction
 - [ ] Define the visual design language for Burnish UI: color palette, typography scale, spacing system, component patterns

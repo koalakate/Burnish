@@ -27,6 +27,7 @@ from services.db.models.check import (
     SlideCheckResult,
 )
 from services.storage.r2 import R2Client
+from services.workers.queue import enqueue_job
 
 router = APIRouter(prefix="/api", tags=["corrections"])
 
@@ -178,7 +179,14 @@ async def fix_all(
 
     await db.commit()
 
-    # TODO: enqueue correction/export worker (Task 5)
+    await enqueue_job(
+        "correction",
+        {
+            "check_run_id": str(check_run_id),
+            "deck_id": str(check_run.deck_id),
+            "org_id": str(check_run.org_id),
+        },
+    )
 
     return FixAllResponse(
         check_run_id=str(check_run_id),

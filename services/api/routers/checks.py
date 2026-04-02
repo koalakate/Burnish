@@ -20,6 +20,7 @@ from services.api.schemas.check_schemas import (
 from services.db.models.brand import BrandRuleset as BrandRulesetModel
 from services.db.models.check import CheckRun, CheckStatus, SlideCheckResult, TriggerType
 from services.db.models.deck import Deck
+from services.workers.queue import enqueue_job
 
 router = APIRouter(prefix="/api", tags=["checks"])
 
@@ -65,7 +66,14 @@ async def trigger_check(
     db.add(check_run)
     await db.commit()
 
-    # TODO: enqueue BullMQ job here (Task 5)
+    await enqueue_job(
+        "check",
+        {
+            "check_run_id": str(check_run.id),
+            "deck_id": str(deck_id),
+            "org_id": str(org_uuid),
+        },
+    )
 
     return CheckTriggerResponse(
         check_run_id=str(check_run.id),
