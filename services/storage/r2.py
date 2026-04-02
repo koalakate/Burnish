@@ -49,8 +49,12 @@ class R2Client:
 
     def download_file(self, key: str) -> bytes:
         response = self.s3.get_object(Bucket=self.bucket_name, Key=key)
-        result: bytes = response["Body"].read()
-        return result
+        body = response["Body"]
+        try:
+            result: bytes = body.read()
+            return result
+        finally:
+            body.close()
 
     def get_signed_url(self, key: str, expires_in: int = 900) -> str:
         url: str = self.s3.generate_presigned_url(

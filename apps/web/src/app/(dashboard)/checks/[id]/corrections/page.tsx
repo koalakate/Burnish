@@ -99,7 +99,8 @@ export default function CorrectionsPage({
   }
 
   const slides = correctionsData.slides;
-  const activeSlide = slides[activeSlideIndex];
+  const clampedIndex = Math.min(activeSlideIndex, Math.max(0, slides.length - 1));
+  const activeSlide = slides[clampedIndex];
   const allCorrections = slides.flatMap((s) => s.corrections);
   const pendingCount = allCorrections.filter((c) => c.correction_status === "pending").length;
   const allResolved = pendingCount === 0;
@@ -184,7 +185,7 @@ export default function CorrectionsPage({
                 key={slide.slide_index}
                 onClick={() => setActiveSlideIndex(idx)}
                 className={`shrink-0 px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-                  idx === activeSlideIndex
+                  idx === clampedIndex
                     ? "bg-brand-400/15 text-brand-400"
                     : "text-muted-foreground hover:bg-muted/30"
                 }`}

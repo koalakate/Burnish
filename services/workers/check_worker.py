@@ -150,6 +150,8 @@ async def process_check_job(job: Any, _token: Any = None) -> dict[str, Any]:
         check_run = await db.get(CheckRun, uuid.UUID(check_run_id))
         if not check_run:
             raise ValueError(f"CheckRun {check_run_id} not found")
+        if str(check_run.org_id) != org_id:
+            raise ValueError(f"CheckRun {check_run_id} does not belong to org {org_id}")
         check_run.status = CheckStatus.running
         check_run.started_at = datetime.now(UTC)
         await db.commit()
