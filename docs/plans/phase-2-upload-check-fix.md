@@ -96,7 +96,7 @@
 - [x] Wire to API: corrections query, accept/dismiss mutations, fix-all mutation, export download
 
 ### Task 10: End-to-end integration test
-- [ ] Write Playwright or Cypress E2E test at `tests/e2e/upload_check_correct.spec.ts`
-- [ ] Test flow: upload a golden deck PPTX → wait for check results → verify issues are displayed → click "Fix All" → download corrected PPTX → verify file is valid
-- [ ] Test Jake's mandate: entire flow completes in under 2 minutes wall-clock time
-- [ ] Test Priya's edit-in-place: dismiss one correction, accept the rest, download
+- [x] Write Playwright or Cypress E2E test at `tests/e2e/upload_check_correct.spec.ts`
+- [x] Test flow: upload a golden deck PPTX → wait for check results → verify issues are displayed → click "Fix All" → download corrected PPTX → verify file is valid
+- [x] Test Jake's mandate: entire flow completes in under 2 minutes wall-clock time
+- [x] Test Priya's edit-in-place: dismiss one correction, accept the rest, download
