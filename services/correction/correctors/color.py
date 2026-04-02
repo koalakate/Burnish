@@ -42,10 +42,22 @@ def correct_colors(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CSM:
     for issue in color_issues:
         d = issue.details
         actual_hex = str(d.get("actual_hex", ""))
-        brand_hex = str(d.get("nearest_brand_hex", ""))
+
+        # Prefer user-edited expected_value over auto-detected nearest_brand_hex
+        edited_hex = str(d.get("expected_value", "")) if d.get("expected_value") else ""
+        brand_hex = edited_hex or str(d.get("nearest_brand_hex", ""))
         brand_rgb: Any = d.get("nearest_brand_rgb", [0, 0, 0])
+
         if actual_hex and brand_hex:
-            rgb: list[int] = [int(v) for v in brand_rgb]
+            if edited_hex:
+                # Parse RGB from hex when using user-edited value
+                h = edited_hex.lstrip("#")
+                if len(h) == 6:
+                    rgb = [int(h[i : i + 2], 16) for i in (0, 2, 4)]
+                else:
+                    rgb = [int(v) for v in brand_rgb]
+            else:
+                rgb = [int(v) for v in brand_rgb]
             if len(rgb) < 3:
                 continue
             replacement = _make_color(brand_hex, rgb[0], rgb[1], rgb[2])

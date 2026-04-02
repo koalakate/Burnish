@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UploadDropzone } from "@/components/upload-dropzone";
 import { useUploadDeck } from "@/lib/queries";
@@ -9,26 +9,36 @@ export default function UploadPage() {
   const router = useRouter();
   const uploadMutation = useUploadDeck();
   const [progress, setProgress] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Clean up interval on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
 
   const handleFileAccepted = useCallback(
     async (file: File) => {
       setProgress(10);
 
       // Simulate progress during upload (real progress would need XHR)
-      const interval = setInterval(() => {
+      intervalRef.current = setInterval(() => {
         setProgress((p) => Math.min(p + 15, 85));
       }, 400);
 
       try {
         const { deck_id } = await uploadMutation.mutateAsync(file);
         setProgress(100);
-        clearInterval(interval);
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        intervalRef.current = null;
 
         // Navigate to deck detail — ingestion runs async, check can be
         // triggered once the deck status is "parsed"
         router.push(`/decks/${deck_id}`);
       } catch {
-        clearInterval(interval);
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        intervalRef.current = null;
         setProgress(0);
       }
     },

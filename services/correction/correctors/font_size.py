@@ -37,6 +37,18 @@ def correct_font_sizes(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CS
         if actual <= 0:
             continue
 
+        # Prefer user-edited expected_value as the target size
+        edited = d.get("expected_value")
+        if edited is not None:
+            try:
+                target = float(str(edited))
+                factor = target / actual
+                key = (issue.slide_index, issue.element_id)
+                affected[key] = (factor, min_pt, max_pt)
+                continue
+            except (ValueError, TypeError):
+                pass
+
         if actual < min_pt:
             factor = min_pt / actual
         elif actual > max_pt and max_pt > 0:

@@ -212,7 +212,11 @@ export default function CorrectionsPage({
                   (s) => s.slide_index === activeSlide.slide_index
                 )?.thumbnail_url ?? null
               }
-              correctedThumbnailUrl={null}
+              correctedThumbnailUrl={
+                checkRunData?.slides?.find(
+                  (s) => s.slide_index === activeSlide.slide_index
+                )?.thumbnail_url ?? null
+              }
               corrections={activeSlide.corrections}
               selectedCorrectionId={selectedCorrectionId}
               onCorrectionClick={handleCorrectionClick}

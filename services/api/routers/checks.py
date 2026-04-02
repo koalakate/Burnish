@@ -20,9 +20,14 @@ from services.api.schemas.check_schemas import (
 from services.db.models.brand import BrandRuleset as BrandRulesetModel
 from services.db.models.check import CheckRun, CheckStatus, SlideCheckResult, TriggerType
 from services.db.models.deck import Deck
+from services.storage.r2 import R2Client
 from services.workers.queue import enqueue_job
 
 router = APIRouter(prefix="/api", tags=["checks"])
+
+
+def _get_r2() -> R2Client:
+    return R2Client()
 
 
 @router.post("/decks/{deck_id}/check", status_code=201)
@@ -86,6 +91,7 @@ async def get_check_run(
     check_run_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: dict[str, Any] = Depends(get_current_user),
+    r2: R2Client = Depends(_get_r2),
 ) -> CheckRunDetailResponse:
     org_id = user["org_id"]
     await set_tenant_context(db, org_id)
@@ -104,7 +110,7 @@ async def get_check_run(
         SlideResultSummary(
             slide_index=sr.slide_index,
             dqs_slide=sr.dqs_slide,
-            thumbnail_url=sr.thumbnail_ref or None,
+            thumbnail_url=r2.get_signed_url(sr.thumbnail_ref) if sr.thumbnail_ref else None,
         )
         for sr in sorted(check_run.slide_results, key=lambda s: s.slide_index)
     ]
@@ -130,6 +136,7 @@ async def get_slide_issues(
     slide_index: int,
     db: AsyncSession = Depends(get_db),
     user: dict[str, Any] = Depends(get_current_user),
+    r2: R2Client = Depends(_get_r2),
 ) -> SlideDetailResponse:
     org_id = user["org_id"]
     await set_tenant_context(db, org_id)
@@ -174,6 +181,8 @@ async def get_slide_issues(
     return SlideDetailResponse(
         slide_index=slide_result.slide_index,
         dqs_slide=slide_result.dqs_slide,
-        thumbnail_url=slide_result.thumbnail_ref or None,
+        thumbnail_url=(
+            r2.get_signed_url(slide_result.thumbnail_ref) if slide_result.thumbnail_ref else None
+        ),
         issues=issues,
     )

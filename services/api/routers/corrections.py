@@ -199,20 +199,25 @@ async def fix_all(
         )
 
     accepted_count = 0
+    actionable_count = 0
     for sr in check_run.slide_results:
         for issue in sr.issues:
-            if issue.correction_status not in (
-                CorrectionStatus.rejected,
+            if issue.correction_status == CorrectionStatus.rejected:
+                continue
+            if issue.correction_status in (
                 CorrectionStatus.edited,
                 CorrectionStatus.accepted,
             ):
-                if issue.correction_applied or issue.expected_value is not None:
-                    issue.correction_status = CorrectionStatus.accepted
-                    accepted_count += 1
+                actionable_count += 1
+                continue
+            if issue.correction_applied or issue.expected_value is not None:
+                issue.correction_status = CorrectionStatus.accepted
+                accepted_count += 1
+                actionable_count += 1
 
     await db.commit()
 
-    if accepted_count > 0:
+    if actionable_count > 0:
         await enqueue_job(
             "correction",
             {
@@ -225,7 +230,7 @@ async def fix_all(
     return FixAllResponse(
         check_run_id=str(check_run_id),
         accepted_count=accepted_count,
-        status="accepted" if accepted_count > 0 else "no_corrections",
+        status="accepted" if actionable_count > 0 else "no_corrections",
     )
 
 

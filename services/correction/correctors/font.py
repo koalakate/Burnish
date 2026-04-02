@@ -35,17 +35,21 @@ def correct_fonts(csm: CSM, issues: list[Issue], brand: BrandRuleset) -> CSM:
     if not font_issues or not brand.fonts:
         return csm
 
-    replacement_family = brand.fonts[0].family
+    default_replacement = brand.fonts[0].family
     allowed_families = {f.family for f in brand.fonts}
 
-    # Build set of (slide_index, element_id) that need fixing
-    affected: set[tuple[int, str]] = set()
+    # Build map of (slide_index, element_id) -> replacement font
+    # Prefer user-edited expected_value over default brand font
+    affected: dict[tuple[int, str], str] = {}
     for issue in font_issues:
-        affected.add((issue.slide_index, issue.element_id))
+        edited = issue.details.get("expected_value")
+        replacement = str(edited) if edited else default_replacement
+        affected[(issue.slide_index, issue.element_id)] = replacement
 
     for slide in csm.slides:
         for elem in slide.elements:
-            if (slide.index, elem.id) not in affected:
+            replacement_family = affected.get((slide.index, elem.id))
+            if replacement_family is None:
                 continue
 
             if elem.type == "text":

@@ -15,6 +15,7 @@ from fastapi.testclient import TestClient
 
 from services.api.deps import get_current_user, get_db
 from services.api.main import app
+from services.api.routers.checks import _get_r2 as _get_r2_checks
 from services.api.routers.decks import _get_r2
 from services.db.models.check import (
     CheckRun,
@@ -466,11 +467,15 @@ class TestGetCheckRun:
         sr1 = _make_slide_result(cr.id, slide_index=1)
         cr.slide_results = [sr1, sr0]  # out of order to test sorting
 
+        r2_mock = MagicMock()
+        r2_mock.get_signed_url = MagicMock(side_effect=lambda key: f"https://signed/{key}")
+
         session = make_mock_session(
             execute_side_effects=[MockScalarResult(value=cr)]
         )
         app.dependency_overrides[get_db] = lambda: session
         app.dependency_overrides[get_current_user] = lambda: _user()
+        app.dependency_overrides[_get_r2_checks] = lambda: r2_mock
 
         try:
             client = TestClient(app)
@@ -482,6 +487,7 @@ class TestGetCheckRun:
             assert len(body["slides"]) == 2
             assert body["slides"][0]["slide_index"] == 0
             assert body["slides"][1]["slide_index"] == 1
+            assert body["slides"][0]["thumbnail_url"].startswith("https://signed/")
         finally:
             app.dependency_overrides.clear()
 
@@ -526,6 +532,9 @@ class TestGetSlideIssues:
         issue = _make_issue(sr.id)
         sr.issues = [issue]
 
+        r2_mock = MagicMock()
+        r2_mock.get_signed_url = MagicMock(side_effect=lambda key: f"https://signed/{key}")
+
         session = make_mock_session(
             execute_side_effects=[
                 MockScalarResult(value=cr),   # check_run lookup
@@ -534,6 +543,7 @@ class TestGetSlideIssues:
         )
         app.dependency_overrides[get_db] = lambda: session
         app.dependency_overrides[get_current_user] = lambda: _user()
+        app.dependency_overrides[_get_r2_checks] = lambda: r2_mock
 
         try:
             client = TestClient(app)
@@ -542,6 +552,7 @@ class TestGetSlideIssues:
             body = resp.json()
             assert body["slide_index"] == 0
             assert body["dqs_slide"] == 68.0
+            assert body["thumbnail_url"].startswith("https://signed/")
             assert len(body["issues"]) == 1
             assert body["issues"][0]["rule_type"] == "color"
             assert body["issues"][0]["severity"] == "error"
